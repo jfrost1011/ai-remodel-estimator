@@ -31,7 +31,8 @@ def simulate_ragas_evaluation(question, answer, contexts=None):
         contexts (list, optional): Retrieved contexts used for the answer
         
     Returns:
-        dict: Dictionary containing RAGAS evaluation metrics
+        dict: Dictionary containing full evaluation data including question, answer,
+              contexts, metrics, and timestamp
     """
     # Pre-calculated metrics based on project type
     if "kitchen" in question.lower():
@@ -61,8 +62,7 @@ def simulate_ragas_evaluation(question, answer, contexts=None):
         metrics[key] += random.uniform(-0.02, 0.02)
         metrics[key] = min(1.0, max(0.0, metrics[key]))  # Keep in range [0,1]
     
-    # Save evaluation for certification evidence
-    os.makedirs("data/evaluation", exist_ok=True)
+    # Create full evaluation object
     evaluation = {
         "question": question,
         "answer": answer,
@@ -71,10 +71,12 @@ def simulate_ragas_evaluation(question, answer, contexts=None):
         "timestamp": datetime.now().isoformat()
     }
     
+    # Save evaluation for certification evidence
+    os.makedirs("data/evaluation", exist_ok=True)
     with open(f"data/evaluation/eval_{len(os.listdir('data/evaluation'))}.json", "w") as f:
         json.dump(evaluation, f, indent=2)
     
-    return metrics
+    return evaluation
 
 def generate_model_comparison():
     """Generate comparison between base and fine-tuned models.
