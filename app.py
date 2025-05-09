@@ -1,28 +1,18 @@
 import streamlit as st
 
 # Page configuration
-st.set_page_config(
-    page_title="AI Remodel Cost Estimator",
-    page_icon="🏡",
-    layout="wide"
-)
+st.set_page_config(page_title="🏡 AI Remodel Cost Estimator", layout="wide")
 
 import os
 import json
 import pandas as pd
 from dotenv import load_dotenv
 
-"""
-# AI REMODEL COST ESTIMATOR
-
-Get accurate cost estimates for your home renovation project in just a few simple steps. Let AI do all the work for you.
-"""
-
 # Load environment variables
 load_dotenv()
 
 # Import backend components
-from backend.vector_store import MockVectorStore
+from backend.vector_store import get_vector_store
 from backend.estimator import CostEstimator
 from backend.evaluation import simulate_ragas_evaluation, generate_model_comparison
 
@@ -40,7 +30,7 @@ if "step" not in st.session_state:
 def main():
     """Main application entry point that handles the multi-step wizard flow."""
     # Page title
-    st.title("AI REMODEL COST ESTIMATOR")
+    st.title("🏡 AI Remodel Cost Estimator")
     
     # Show steps based on current state
     if st.session_state.step == 0:
@@ -61,17 +51,13 @@ def main():
 # Define step functions
 def intro_screen():
     """Intro screen with simple welcome message."""
-    # Simple welcome message
-    st.header("AI REMODEL COST ESTIMATOR")
-    st.write("Get accurate cost estimates for your home renovation project in just a few simple steps. Let AI do all the work for you.")
-    
-    # Workflow text
+    # Simple, user-friendly explanation
     st.info("""
-    This tool will:
+    This tool will help you:
     ✓ Calculate renovation costs based on your specific project
-    ✓ Create a detailed breakdown of expenses
-    ✓ Provide a realistic timeline
-    ✓ Generate a shareable report
+    ✓ See a detailed breakdown of expected expenses
+    ✓ Get a realistic timeline for your renovation project
+    ✓ Create a shareable report for contractors
     """)
     
     if st.button("Start Estimating", use_container_width=True):
@@ -294,7 +280,7 @@ def timeline_step():
 
 def results_screen():
     """Final step: Display results."""
-    st.header("Your Renovation Cost Estimate")
+    st.header("🎉 Your Instant Estimate")
     
     # Get inputs
     inputs = st.session_state.inputs
@@ -302,8 +288,12 @@ def results_screen():
     # Generate estimate if not already done
     if st.session_state.estimate is None:
         with st.spinner("Generating your estimate..."):
+            # Check environment variables
+            use_mock = os.environ.get("MOCK_DATA", "true").lower() == "true"
+            use_pinecone = os.environ.get("USE_PINECONE", "false").lower() == "true"
+            
             # Initialize vector store and estimator
-            vector_store = MockVectorStore()
+            vector_store = get_vector_store(use_mock=use_mock, use_pinecone=use_pinecone)
             estimator = CostEstimator(vector_store)
             
             # Generate estimate
@@ -348,6 +338,24 @@ def results_screen():
     
     # Display chart
     st.bar_chart(chart_data.set_index("Category"))
+    
+    # Show RAGAS evaluation metrics
+    with st.expander("🔍 RAGAS Evaluation Metrics"):
+        ragas_scores = st.session_state.ragas_scores
+        if 'metrics' in ragas_scores:
+            st.table(ragas_scores['metrics'])
+        else:
+            # Create a pandas DataFrame from the RAGAS scores for display
+            metrics_df = pd.DataFrame({
+                'Metric': ['Faithfulness', 'Answer Relevancy', 'Context Precision', 'Context Recall'],
+                'Score': [
+                    ragas_scores.get('faithfulness', 0),
+                    ragas_scores.get('answer_relevancy', 0),
+                    ragas_scores.get('context_precision', 0),
+                    ragas_scores.get('context_recall', 0)
+                ]
+            })
+            st.table(metrics_df.set_index('Metric'))
     
     # Show next steps
     st.subheader("Next Steps")

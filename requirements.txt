@@ -1,10 +1,18 @@
 streamlit==1.31.1
+openai==1.16.0
 langchain-openai==0.0.5
 python-dotenv==1.0.0
 pandas==2.2.0
 altair==5.2.0
 matplotlib==3.8.2
+numpy==1.26.3
 
-# Uncomment for full implementation
-# ragas==0.0.22 
-# sentence-transformers==2.2.2
+# Vector database (uncomment for Pinecone)
+# pinecone-client==3.0.3
+
+# LangSmith for tracing (uncomment for LangSmith)
+# langsmith==0.1.80
+
+# Evaluation
+ragas==0.0.22 
+sentence-transformers==2.2.2
