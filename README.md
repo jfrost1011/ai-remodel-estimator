@@ -23,20 +23,49 @@ This MVP demonstrates all 7 certification tasks:
 
 ## 🚀 Quick Setup
 
+### Using Scripts (Recommended)
+
 ```bash
 # Clone repository
 git clone https://github.com/yourusername/renovation-estimator.git
 cd renovation-estimator
 
-# Create and activate virtual environment (Windows)
-python -m venv venv
-.\venv\Scripts\activate
+# For Linux/macOS
+bash scripts/setup.sh
+# For Windows
+.\scripts\setup.ps1
+
+# Generate synthetic data
+make generate-data
+# or manually:
+python scripts/generate_data.py
+
+# Run application
+make run
+# or manually:
+streamlit run app.py
+```
+
+### Manual Setup
+
+```bash
+# Clone repository
+git clone https://github.com/yourusername/renovation-estimator.git
+cd renovation-estimator
+
+# Create and activate virtual environment
+# For Windows:
+python -m venv .venv
+.\.venv\Scripts\activate
+# For Linux/macOS:
+python -m venv .venv
+source .venv/bin/activate
 
 # Install dependencies
 pip install -r requirements.txt
 
 # Generate synthetic data
-python -c "from backend.data_generator import generate_synthetic_data; generate_synthetic_data()"
+python scripts/generate_data.py
 
 # Run application
 streamlit run app.py
@@ -56,7 +85,98 @@ renovation-estimator/
 │   ├── synthetic/              # Generated projects
 │   ├── fine_tuning/            # Fine-tuning data
 │   └── evaluation/             # RAGAS evaluations
+├── scripts/                    # Utility scripts
+│   ├── setup.sh                # Linux/macOS setup script
+│   ├── setup.ps1               # Windows setup script
+│   ├── generate_data.py        # Data generation script
+│   └── run_evaluation.py       # RAGAS evaluation runner
 ├── utils/                      # Helper functions
 │   ├── pdf_generator.py        # PDF report generation
 │   └── vc_dashboard.py         # VC metrics dashboard
+├── requirements.txt            # Dependencies
+├── .env.example                # Environment variables template
+└── Makefile                    # Common operations shortcuts
+```
+
+## 🛠 Available Commands
+
+The project includes a Makefile for convenient operations:
+
+```bash
+# Set up the environment
+make setup
+
+# Run the application
+make run
+
+# Generate synthetic data
+make generate-data
+
+# Run RAGAS evaluation
+make run-evaluation
+
+# Clean generated data
+make clean
+
+# Show help
+make help
+```
+
+## 💻 Usage Guide
+
+1. **Start the Application**: Run `make run` or `streamlit run app.py`
+2. **Fill Out the Form**: Complete the 5-step form for your renovation project:
+   - Location (ZIP code)
+   - Project type (Kitchen, Bathroom, Home Addition)
+   - Square footage
+   - Material grade (Standard, Premium, Luxury)
+   - Timeline (months)
+3. **View Results**: See estimated cost range, breakdown, and timeline
+4. **Export Report**: Download a PDF report of your estimate
+5. **View Comparison**: Compare estimates using base vs. fine-tuned model
+
+## 📊 RAGAS Evaluation
+
+The project includes RAGAS metrics evaluation:
+
+```bash
+# Run the evaluation
+make run-evaluation
+
+# View results in data/evaluation/
+# - ragas_results.json: Raw evaluation results
+# - model_comparison.csv: Comparison summary
+# - certification_evidence.json: Certification evidence
+```
+
+## 🧪 Fine-tuning Process
+
+The estimator demonstrates fine-tuned embeddings for improved performance:
+
+1. **Data Generation**: Create diverse renovation project data
+2. **Input-Output Pairs**: Format data for fine-tuning
+3. **Training**: Fine-tune embeddings (simulated)
+4. **Evaluation**: Compare base vs. fine-tuned model
+5. **Certification**: Generate evidence of improvement
+
+## 🔮 Future Enhancements
+
+- Real-time market data integration
+- Contractor matching feature
+- Project timeline visualization
+- Material selection with visual previews
+- Historical estimate tracking
+
+## 📝 Environment Variables
+
+Copy `.env.example` to `.env` and configure:
+
+```
+# API keys (uncomment if using)
+# OPENAI_API_KEY=your-api-key-here
+
+# Feature flags
+MOCK_DATA=true
+ENABLE_EVALUATION=true
+ENABLE_FINE_TUNING=false
 ```
