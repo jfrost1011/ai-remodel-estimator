@@ -1,30 +1,22 @@
 import streamlit as st
+
+# Page configuration
+st.set_page_config(
+    page_title="AI Remodel Cost Estimator",
+    page_icon="🏡",
+    layout="wide"
+)
+
 import os
 import json
 import pandas as pd
 from dotenv import load_dotenv
 
 """
-AI Remodel Cost Estimator - Main Streamlit Application
+# Home Renovation Cost Estimator
 
-This is the main application file for the AI Remodel Cost Estimator, a Streamlit-based
-web application that provides instant cost estimates for home renovation projects.
-The application follows a multi-step wizard pattern to collect user inputs and 
-generate estimates using a RAG-powered backend.
-
-Key features:
-- Multi-step wizard interface for easy user interaction
-- Integration with MockVectorStore and CostEstimator components
-- RAGAS evaluation metrics for model performance tracking
-- VC-ready metrics and visualizations
-- Professional PDF report generation
-- State management using Streamlit session state
-
-Certification compliance:
-- 5-step form flow (ZIP, Project Type, Square Footage, Material Grade, Timeline)
-- RAG-powered cost estimation with region and material adjustments
-- Fine-tuning demonstration with performance metrics
-- Downloadable reports with cost breakdowns
+Get accurate cost estimates for your home renovation project in just a few simple steps.
+Save time and plan your budget better with our easy-to-use tool.
 """
 
 # Load environment variables
@@ -38,13 +30,6 @@ from backend.evaluation import simulate_ragas_evaluation, generate_model_compari
 # Import utility functions
 from utils.vc_dashboard import render_vc_dashboard
 from utils.pdf_generator import display_pdf_html
-
-# Page configuration
-st.set_page_config(
-    page_title="AI Remodel Cost Estimator",
-    page_icon="🏡",
-    layout="wide"
-)
 
 # Initialize session state
 if "step" not in st.session_state:
@@ -76,27 +61,23 @@ def main():
 
 # Define step functions
 def intro_screen():
-    """Intro screen with VC dashboard."""
-    # VC Dashboard at top
-    render_vc_dashboard()
+    """Intro screen with simple welcome message."""
+    # Simple welcome message
+    st.header("Home Renovation Cost Estimator")
+    st.write("Get accurate cost estimates for your home renovation project in just a few simple steps.")
     
-    # Intro message
-    st.header("Get Instant Renovation Cost Estimates")
-    st.write("Our AI provides 92% accurate estimates in just 1.8 seconds - powered by fine-tuned embeddings and RAG technology.")
-    
-    # Certification Task 1-2: Problem & Solution statement
-    with st.expander("About This Project"):
-        st.write("""
-        **Problem**: 40% of home renovation projects exceed budget by an average of 23%, 
-        costing homeowners $241B annually in unplanned expenses.
-        
-        **Solution**: AI-powered cost estimator using retrieval-augmented generation with 
-        fine-tuned embeddings to provide accurate, instant estimates based on project details.
-        """)
+    # Simple, user-friendly explanation
+    st.info("""
+    This tool will help you:
+    ✓ Calculate renovation costs based on your specific project
+    ✓ See a detailed breakdown of expected expenses
+    ✓ Get a realistic timeline for your renovation project
+    ✓ Create a shareable report for contractors
+    """)
     
     if st.button("Start Estimating", use_container_width=True):
         st.session_state.step = 1
-        st.experimental_rerun()
+        st.rerun()
 
 def zip_code_step():
     """Step 1: Location."""
@@ -243,44 +224,43 @@ def material_grade_step():
         if st.button("← Back"):
             back_step()
     
+    # Initialize the selected grade in session state if not already there
+    if "temp_material_grade" not in st.session_state:
+        st.session_state.temp_material_grade = None
+    
     # Material grade selection
     col1, col2, col3 = st.columns(3)
     
     with col1:
-        standard = st.button(
-            "Standard",
-            use_container_width=True
-        )
-        if standard:
-            st.success("✓ Standard selected")
-            st.markdown("- Mid-range appliances\n- Laminate countertops\n- Stock cabinets")
-            material_grade = "standard"
+        if st.button("Standard", use_container_width=True, key="btn_standard"):
+            st.session_state.temp_material_grade = "standard"
     
     with col2:
-        premium = st.button(
-            "Premium",
-            use_container_width=True
-        )
-        if premium:
-            st.success("✓ Premium selected")
-            st.markdown("- Higher-end appliances\n- Quartz countertops\n- Semi-custom cabinets")
-            material_grade = "premium"
+        if st.button("Premium", use_container_width=True, key="btn_premium"):
+            st.session_state.temp_material_grade = "premium"
     
     with col3:
-        luxury = st.button(
-            "Luxury",
-            use_container_width=True
-        )
-        if luxury:
-            st.success("✓ Luxury selected")
-            st.markdown("- Top-tier appliances\n- Marble/granite countertops\n- Custom cabinets")
-            material_grade = "luxury"
+        if st.button("Luxury", use_container_width=True, key="btn_luxury"):
+            st.session_state.temp_material_grade = "luxury"
+    
+    # Display details based on selection
+    if st.session_state.temp_material_grade == "standard":
+        st.success("✓ Standard selected")
+        st.markdown("- Mid-range appliances\n- Laminate countertops\n- Stock cabinets")
+    elif st.session_state.temp_material_grade == "premium":
+        st.success("✓ Premium selected")
+        st.markdown("- Higher-end appliances\n- Quartz countertops\n- Semi-custom cabinets")
+    elif st.session_state.temp_material_grade == "luxury":
+        st.success("✓ Luxury selected")
+        st.markdown("- Top-tier appliances\n- Marble/granite countertops\n- Custom cabinets")
     
     # Continue button (only show if a material grade is selected)
-    if "material_grade" in locals():
+    if st.session_state.temp_material_grade:
         with cols[2]:
             if st.button("Next →"):
-                next_step(material_grade=material_grade)
+                next_step(material_grade=st.session_state.temp_material_grade)
+                # Clear temporary selection after moving to next step
+                st.session_state.temp_material_grade = None
 
 def timeline_step():
     """Step 5: Timeline."""
@@ -330,7 +310,7 @@ def results_screen():
             # Generate estimate
             st.session_state.estimate = estimator.estimate(inputs)
             
-            # Simulate RAGAS evaluation
+            # Simulate RAGAS evaluation but don't show it to users
             query = f"Cost estimate for {inputs.get('project_type', 'kitchen')} with {inputs.get('square_feet', 200)} sq ft"
             st.session_state.ragas_scores = simulate_ragas_evaluation(
                 question=query,
@@ -370,94 +350,27 @@ def results_screen():
     # Display chart
     st.bar_chart(chart_data.set_index("Category"))
     
+    # Show next steps
+    st.subheader("Next Steps")
+    st.write("""
+    Now that you have your estimate, you can:
+    1. Contact contractors for quotes
+    2. Plan your renovation timeline
+    3. Create a budget based on this estimate
+    4. Download a detailed report to share
+    """)
+    
     # PDF Export
     st.subheader("Export Options")
-    if st.button("View PDF Report"):
+    if st.button("Download PDF Report"):
         display_pdf_html(inputs, estimate)
-    
-    # Certification-specific section
-    with st.expander("RAGAS Evaluation Metrics"):
-        st.write("### Retrieval Evaluation Metrics")
-        
-        if "ragas_scores" in st.session_state:
-            metrics = st.session_state.ragas_scores
-            
-            # Create metrics table
-            metrics_df = pd.DataFrame({
-                "Metric": list(metrics.keys()),
-                "Score": list(metrics.values()),
-                "Threshold": [0.8, 0.75, 0.7, 0.7]
-            })
-            
-            st.table(metrics_df)
-            
-            # Show pass/fail indicators
-            for metric, score in metrics.items():
-                threshold = 0.8 if metric == "faithfulness" else (0.75 if metric == "answer_relevancy" else 0.7)
-                if score >= threshold:
-                    st.success(f"{metric.title()}: {score:.2f} ✓")
-                else:
-                    st.warning(f"{metric.title()}: {score:.2f} ✗")
-    
-    # Fine-tuning comparison
-    with st.expander("Base vs. Fine-tuned Model Comparison"):
-        st.write("### Embedding Model Performance")
-        
-        # Get comparison data
-        comparison = generate_model_comparison()
-        
-        # Create comparison table
-        comparison_data = {
-            "Metric": [],
-            "Base Model": [],
-            "Fine-tuned": [],
-            "Improvement": []
-        }
-        
-        base = comparison["base_model"]["metrics"]
-        fine_tuned = comparison["fine_tuned_model"]["metrics"]
-        
-        for metric in base:
-            improvement = ((fine_tuned[metric] - base[metric]) / base[metric]) * 100
-            
-            comparison_data["Metric"].append(metric.title())
-            comparison_data["Base Model"].append(f"{base[metric]:.2f}")
-            comparison_data["Fine-tuned"].append(f"{fine_tuned[metric]:.2f}")
-            comparison_data["Improvement"].append(f"+{improvement:.1f}%")
-        
-        st.table(pd.DataFrame(comparison_data))
-        
-        # Add chart
-        st.write("### Visual Comparison")
-        chart_data = pd.DataFrame({
-            "Metric": comparison_data["Metric"],
-            "Base Model": [float(x) for x in comparison_data["Base Model"]],
-            "Fine-tuned": [float(x) for x in comparison_data["Fine-tuned"]]
-        })
-        
-        st.bar_chart(chart_data.set_index("Metric"))
-    
-    # VC-focused features section
-    with st.expander("Pro Features"):
-        st.write("Unlock additional features with our Pro subscription:")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.write("✅ Detailed material price breakdowns")
-            st.write("✅ Contractor matching service")
-            st.write("✅ Historical price trends")
-        with col2:
-            st.write("✅ Financing options calculator")
-            st.write("✅ Project timeline planner")
-            st.write("✅ Unlimited PDF exports")
-        
-        st.button("Upgrade to Pro - $9.99/month")
     
     # Start over
     if st.button("Start New Estimate"):
         st.session_state.step = 0
         st.session_state.inputs = {}
         st.session_state.estimate = None
-        st.experimental_rerun()
+        st.rerun()
 
 # Helper functions
 def next_step(**kwargs):
@@ -468,12 +381,12 @@ def next_step(**kwargs):
     
     # Move to next step
     st.session_state.step += 1
-    st.experimental_rerun()
+    st.rerun()
 
 def back_step():
     """Go back to previous step."""
     st.session_state.step -= 1
-    st.experimental_rerun()
+    st.rerun()
 
 # Run app
 if __name__ == "__main__":
