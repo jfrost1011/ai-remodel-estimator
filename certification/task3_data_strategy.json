@@ -1,0 +1,19 @@
+{
+  "method": "Synthetic data generation with project-level chunking",
+  "sources": [
+    {
+      "name": "Synthetic renovation projects",
+      "count": 20,
+      "generation_method": "Structured templates with realistic variations"
+    }
+  ],
+  "chunking_strategy": {
+    "method": "Project-level chunking",
+    "reasoning": "Each renovation project is self-contained and most effective as a complete unit"
+  },
+  "embedding_model": "sentence-transformers/all-MiniLM-L6-v2",
+  "embedding_approach": {
+    "dimension": 384,
+    "fine_tuning": "Positive and negative project pairs"
+  }
+}

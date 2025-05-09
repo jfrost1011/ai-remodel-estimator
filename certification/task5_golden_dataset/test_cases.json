@@ -1,0 +1,59 @@
+[
+  {
+    "question": "What would a kitchen remodel cost for 200 sq ft with premium materials?",
+    "expected_answer": {
+      "total_range": [
+        70000,
+        90000
+      ],
+      "breakdown": {
+        "materials": [
+          28000,
+          36000
+        ],
+        "labor": [
+          24500,
+          31500
+        ]
+      }
+    }
+  },
+  {
+    "question": "How much for a bathroom renovation of 100 sq ft with standard materials?",
+    "expected_answer": {
+      "total_range": [
+        25000,
+        35000
+      ],
+      "breakdown": {
+        "materials": [
+          10000,
+          14000
+        ],
+        "labor": [
+          8750,
+          12250
+        ]
+      }
+    }
+  },
+  {
+    "question": "Cost estimate for a 400 sq ft ADU with luxury materials?",
+    "expected_answer": {
+      "total_range": [
+        240000,
+        320000
+      ],
+      "breakdown": {
+        "materials": [
+          96000,
+          128000
+        ],
+        "labor": [
+          84000,
+          112000
+        ]
+      }
+    }
+  }
+]
