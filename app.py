@@ -13,10 +13,9 @@ import pandas as pd
 from dotenv import load_dotenv
 
 """
-# Home Renovation Cost Estimator
+# AI REMODEL COST ESTIMATOR
 
-Get accurate cost estimates for your home renovation project in just a few simple steps.
-Save time and plan your budget better with our easy-to-use tool.
+Get accurate cost estimates for your home renovation project in just a few simple steps. Let AI do all the work for you.
 """
 
 # Load environment variables
@@ -41,7 +40,7 @@ if "step" not in st.session_state:
 def main():
     """Main application entry point that handles the multi-step wizard flow."""
     # Page title
-    st.title("🏡 AI Remodel Cost Estimator")
+    st.title("AI REMODEL COST ESTIMATOR")
     
     # Show steps based on current state
     if st.session_state.step == 0:
@@ -63,16 +62,16 @@ def main():
 def intro_screen():
     """Intro screen with simple welcome message."""
     # Simple welcome message
-    st.header("Home Renovation Cost Estimator")
-    st.write("Get accurate cost estimates for your home renovation project in just a few simple steps.")
+    st.header("AI REMODEL COST ESTIMATOR")
+    st.write("Get accurate cost estimates for your home renovation project in just a few simple steps. Let AI do all the work for you.")
     
-    # Simple, user-friendly explanation
+    # Workflow text
     st.info("""
-    This tool will help you:
+    This tool will:
     ✓ Calculate renovation costs based on your specific project
-    ✓ See a detailed breakdown of expected expenses
-    ✓ Get a realistic timeline for your renovation project
-    ✓ Create a shareable report for contractors
+    ✓ Create a detailed breakdown of expenses
+    ✓ Provide a realistic timeline
+    ✓ Generate a shareable report
     """)
     
     if st.button("Start Estimating", use_container_width=True):
