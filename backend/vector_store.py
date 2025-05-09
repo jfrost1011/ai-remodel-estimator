@@ -35,8 +35,8 @@ class MockVectorStore:
         # If no file found, generate synthetic data
         if not self.data:
             print("No data files found, generating synthetic data...")
-            from .data_generator import generate_projects
-            raw_data = generate_projects(50)
+            from .data_generator import generate_synthetic_data
+            raw_data = generate_synthetic_data(50)
             self.data = self._format_data(raw_data)
     
     def _format_data(self, raw_data):
