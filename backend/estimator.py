@@ -3,7 +3,20 @@ import json
 from datetime import datetime
 
 class CostEstimator:
-    """Renovation cost estimator with mocked RAG."""
+    """Renovation cost estimator with mocked RAG.
+    
+    This estimator uses a Mock RAG (Retrieval-Augmented Generation) approach to generate
+    accurate cost estimates for renovation projects. It retrieves similar projects from
+    the vector store and uses them as a basis for cost calculation, with adjustments
+    based on project-specific factors.
+    
+    Features:
+    - Integration with MockVectorStore for similar project retrieval
+    - Adjustments based on material grade, location, and timeline
+    - Detailed cost breakdown generation
+    - Confidence scoring for estimates
+    - Input validation and sanitization
+    """
     
     def __init__(self, vector_store):
         """Initialize with vector store."""
