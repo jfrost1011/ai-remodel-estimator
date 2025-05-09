@@ -1,8 +1,41 @@
 import streamlit as st
 from datetime import datetime
 
+"""
+PDF Report Generator for Renovation Cost Estimator
+
+This module provides HTML-based report generation functionality for the 
+renovation cost estimator. It creates professionally formatted, downloadable
+reports that summarize project details and cost estimates.
+
+HTML is used for faster development in the MVP stage, with the intention
+to implement true PDF generation in production. The HTML reports are designed
+to be printer-friendly and downloadable.
+
+Key features:
+- Professional report generation with consistent styling
+- Detailed project summary and cost breakdown
+- Next steps recommendations for users
+- Downloadable output for sharing with contractors
+- Responsive design that works well on all devices
+"""
+
 def generate_html_report(inputs, estimate):
-    """Generate HTML report for cost estimate (mocked PDF for MVP)."""
+    """Generate HTML report for cost estimate (mocked PDF for MVP).
+    
+    Creates a professionally formatted HTML report that summarizes
+    the renovation project details and cost estimates. This HTML acts
+    as a stand-in for true PDF generation in the MVP stage.
+    
+    Args:
+        inputs (dict): Dictionary containing user inputs like project type,
+                      square footage, material grade, and zip code
+        estimate (dict): Dictionary containing the cost estimate data,
+                        including cost range, timeline, and breakdown
+                        
+    Returns:
+        str: Formatted HTML string for the report
+    """
     # Extract data
     project_type = inputs.get("project_type", "kitchen").title()
     square_feet = inputs.get("square_feet", 200)
@@ -144,7 +177,15 @@ def generate_html_report(inputs, estimate):
     return html
 
 def display_pdf_html(inputs, estimate):
-    """Display PDF report as HTML in Streamlit."""
+    """Display PDF report as HTML in Streamlit.
+    
+    Renders the HTML report in the Streamlit app and provides
+    a download button for users to save the report locally.
+    
+    Args:
+        inputs (dict): Dictionary of user inputs
+        estimate (dict): Dictionary of cost estimate results
+    """
     html = generate_html_report(inputs, estimate)
     
     # Display in Streamlit
