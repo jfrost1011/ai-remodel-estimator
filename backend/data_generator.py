@@ -3,8 +3,35 @@ import random
 import os
 from datetime import datetime
 
+"""
+Synthetic Data Generator for Renovation Cost Estimator
+
+This module generates realistic synthetic data for renovation projects,
+which serves as the foundation for the RAG-based cost estimation system.
+The data includes various project types, realistic square footage ranges,
+material grades, and location-based cost variations.
+
+Key features:
+- Generates diverse renovation project types (kitchen, bathroom, addition)
+- Creates realistic cost variations based on project parameters
+- Produces structured data with detailed metadata
+- Generates detailed cost breakdowns by category
+- Supports persistence to JSON for vector store retrieval
+"""
+
 def generate_synthetic_data(count=20):
-    """Generate synthetic renovation projects."""
+    """Generate synthetic renovation projects.
+    
+    Creates a specified number of synthetic renovation projects with realistic
+    parameters and cost calculations. Each project includes detailed metadata
+    suitable for vector storage and retrieval.
+    
+    Args:
+        count (int): Number of synthetic projects to generate
+        
+    Returns:
+        list: Collection of generated project objects
+    """
     project_types = ["kitchen", "bathroom", "addition"]
     material_grades = ["standard", "premium", "luxury"]
     zip_codes = ["90210", "10001", "60601", "98101", "33139"]
