@@ -4,6 +4,29 @@ import json
 import pandas as pd
 from dotenv import load_dotenv
 
+"""
+AI Remodel Cost Estimator - Main Streamlit Application
+
+This is the main application file for the AI Remodel Cost Estimator, a Streamlit-based
+web application that provides instant cost estimates for home renovation projects.
+The application follows a multi-step wizard pattern to collect user inputs and 
+generate estimates using a RAG-powered backend.
+
+Key features:
+- Multi-step wizard interface for easy user interaction
+- Integration with MockVectorStore and CostEstimator components
+- RAGAS evaluation metrics for model performance tracking
+- VC-ready metrics and visualizations
+- Professional PDF report generation
+- State management using Streamlit session state
+
+Certification compliance:
+- 5-step form flow (ZIP, Project Type, Square Footage, Material Grade, Timeline)
+- RAG-powered cost estimation with region and material adjustments
+- Fine-tuning demonstration with performance metrics
+- Downloadable reports with cost breakdowns
+"""
+
 # Load environment variables
 load_dotenv()
 
@@ -31,6 +54,7 @@ if "step" not in st.session_state:
 
 # Main function
 def main():
+    """Main application entry point that handles the multi-step wizard flow."""
     # Page title
     st.title("🏡 AI Remodel Cost Estimator")
     
