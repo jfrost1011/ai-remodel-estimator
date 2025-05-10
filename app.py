@@ -6,15 +6,25 @@ st.set_page_config(page_title="🏡 AI Remodel Cost Estimator", layout="wide")
 import os
 import json
 import pandas as pd
-from dotenv import load_dotenv
+from utils.env_loader import load_env_vars
 
-# Load environment variables
-load_dotenv()
+# Load environment variables properly
+if not load_env_vars():
+    st.error("Failed to load environment variables. Please check your .env file.")
+    st.stop()
+
+# Initialize LangSmith if available
+LANGSMITH_API_KEY = os.environ.get("LANGSMITH_API_KEY")
+LANGSMITH_PROJECT = os.environ.get("LANGSMITH_PROJECT", "renovation-estimator")
+if LANGSMITH_API_KEY:
+    from langsmith import Client
+    langsmith_client = Client(api_key=LANGSMITH_API_KEY)
+    print(f"LangSmith initialized with project: {LANGSMITH_PROJECT}")
 
 # Import backend components
 from backend.vector_store import get_vector_store
 from backend.estimator import CostEstimator
-from backend.evaluation import simulate_ragas_evaluation, generate_model_comparison
+from backend.evaluation import evaluate_with_ragas, generate_model_comparison
 
 # Import utility functions
 from utils.vc_dashboard import render_vc_dashboard
@@ -299,11 +309,20 @@ def results_screen():
             # Generate estimate
             st.session_state.estimate = estimator.estimate(inputs)
             
-            # Simulate RAGAS evaluation but don't show it to users
+            # Extract context for evaluation
+            try:
+                contexts = [doc.page_content for doc in estimator.retriever.get_relevant_documents(
+                    f"Cost estimate for {inputs.get('project_type', 'kitchen')} with {inputs.get('square_feet', 200)} sq ft"
+                )]
+            except:
+                contexts = None
+            
+            # Use RAGAS for evaluation with LangSmith tracing
             query = f"Cost estimate for {inputs.get('project_type', 'kitchen')} with {inputs.get('square_feet', 200)} sq ft"
-            st.session_state.ragas_scores = simulate_ragas_evaluation(
+            st.session_state.ragas_scores = evaluate_with_ragas(
                 question=query,
-                answer=json.dumps(st.session_state.estimate)
+                answer=json.dumps(st.session_state.estimate),
+                contexts=contexts
             )
     
     estimate = st.session_state.estimate
@@ -342,10 +361,15 @@ def results_screen():
     # Show RAGAS evaluation metrics
     with st.expander("🔍 RAGAS Evaluation Metrics"):
         ragas_scores = st.session_state.ragas_scores
-        if 'metrics' in ragas_scores:
-            st.table(ragas_scores['metrics'])
+        if 'metrics' in ragas_scores and ragas_scores['metrics']:
+            # Create a pandas DataFrame from the metrics dictionary
+            metrics_df = pd.DataFrame({
+                'Metric': list(ragas_scores['metrics'].keys()),
+                'Score': list(ragas_scores['metrics'].values())
+            })
+            st.table(metrics_df.set_index('Metric'))
         else:
-            # Create a pandas DataFrame from the RAGAS scores for display
+            # Fallback to direct access if metrics dict is not available
             metrics_df = pd.DataFrame({
                 'Metric': ['Faithfulness', 'Answer Relevancy', 'Context Precision', 'Context Recall'],
                 'Score': [

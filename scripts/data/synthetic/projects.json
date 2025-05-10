@@ -1,0 +1,1002 @@
+[
+  {
+    "id": "proj_0",
+    "text": "kitchen renovation with 235 square feet using premium materials in 98101. Total cost: $116220.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 235,
+      "material_grade": "premium",
+      "zip_code": "98101",
+      "total_cost": 116220,
+      "cost_breakdown": {
+        "materials": 46488,
+        "labor": 40677,
+        "permits": 5811,
+        "design": 11622,
+        "contingency": 11622
+      },
+      "timeline_weeks": 4,
+      "timestamp": "2025-05-08T21:55:08.110785"
+    }
+  },
+  {
+    "id": "proj_1",
+    "text": "kitchen renovation with 227 square feet using standard materials in 10001. Total cost: $45194.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 227,
+      "material_grade": "standard",
+      "zip_code": "10001",
+      "total_cost": 45194,
+      "cost_breakdown": {
+        "materials": 18077,
+        "labor": 15817,
+        "permits": 2259,
+        "design": 4519,
+        "contingency": 4519
+      },
+      "timeline_weeks": 9,
+      "timestamp": "2025-05-08T21:55:08.110819"
+    }
+  },
+  {
+    "id": "proj_2",
+    "text": "kitchen renovation with 192 square feet using standard materials in 90210. Total cost: $59748.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 192,
+      "material_grade": "standard",
+      "zip_code": "90210",
+      "total_cost": 59748,
+      "cost_breakdown": {
+        "materials": 23899,
+        "labor": 20911,
+        "permits": 2987,
+        "design": 5974,
+        "contingency": 5974
+      },
+      "timeline_weeks": 10,
+      "timestamp": "2025-05-08T21:55:08.110827"
+    }
+  },
+  {
+    "id": "proj_3",
+    "text": "addition renovation with 611 square feet using premium materials in 33139. Total cost: $236695.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 611,
+      "material_grade": "premium",
+      "zip_code": "33139",
+      "total_cost": 236695,
+      "cost_breakdown": {
+        "materials": 94678,
+        "labor": 82843,
+        "permits": 11834,
+        "design": 23669,
+        "contingency": 23669
+      },
+      "timeline_weeks": 18,
+      "timestamp": "2025-05-08T21:55:08.110835"
+    }
+  },
+  {
+    "id": "proj_4",
+    "text": "kitchen renovation with 266 square feet using luxury materials in 10001. Total cost: $89406.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 266,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 89406,
+      "cost_breakdown": {
+        "materials": 35762,
+        "labor": 31292,
+        "permits": 4470,
+        "design": 8940,
+        "contingency": 8940
+      },
+      "timeline_weeks": 10,
+      "timestamp": "2025-05-08T21:55:08.110843"
+    }
+  },
+  {
+    "id": "proj_5",
+    "text": "addition renovation with 444 square feet using standard materials in 60601. Total cost: $120165.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 444,
+      "material_grade": "standard",
+      "zip_code": "60601",
+      "total_cost": 120165,
+      "cost_breakdown": {
+        "materials": 48066,
+        "labor": 42057,
+        "permits": 6008,
+        "design": 12016,
+        "contingency": 12016
+      },
+      "timeline_weeks": 12,
+      "timestamp": "2025-05-08T21:55:08.110851"
+    }
+  },
+  {
+    "id": "proj_6",
+    "text": "addition renovation with 779 square feet using premium materials in 90210. Total cost: $432489.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 779,
+      "material_grade": "premium",
+      "zip_code": "90210",
+      "total_cost": 432489,
+      "cost_breakdown": {
+        "materials": 172995,
+        "labor": 151371,
+        "permits": 21624,
+        "design": 43248,
+        "contingency": 43248
+      },
+      "timeline_weeks": 12,
+      "timestamp": "2025-05-08T21:55:08.110857"
+    }
+  },
+  {
+    "id": "proj_7",
+    "text": "bathroom renovation with 57 square feet using luxury materials in 10001. Total cost: $23570.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 57,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 23570,
+      "cost_breakdown": {
+        "materials": 9428,
+        "labor": 8249,
+        "permits": 1178,
+        "design": 2357,
+        "contingency": 2357
+      },
+      "timeline_weeks": 6,
+      "timestamp": "2025-05-08T21:55:08.110864"
+    }
+  },
+  {
+    "id": "proj_8",
+    "text": "kitchen renovation with 135 square feet using premium materials in 33139. Total cost: $61547.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 135,
+      "material_grade": "premium",
+      "zip_code": "33139",
+      "total_cost": 61547,
+      "cost_breakdown": {
+        "materials": 24618,
+        "labor": 21541,
+        "permits": 3077,
+        "design": 6154,
+        "contingency": 6154
+      },
+      "timeline_weeks": 6,
+      "timestamp": "2025-05-08T21:55:08.110871"
+    }
+  },
+  {
+    "id": "proj_9",
+    "text": "addition renovation with 443 square feet using premium materials in 98101. Total cost: $259715.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 443,
+      "material_grade": "premium",
+      "zip_code": "98101",
+      "total_cost": 259715,
+      "cost_breakdown": {
+        "materials": 103886,
+        "labor": 90900,
+        "permits": 12985,
+        "design": 25971,
+        "contingency": 25971
+      },
+      "timeline_weeks": 18,
+      "timestamp": "2025-05-08T21:55:08.110876"
+    }
+  },
+  {
+    "id": "proj_10",
+    "text": "addition renovation with 553 square feet using standard materials in 33139. Total cost: $214375.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 553,
+      "material_grade": "standard",
+      "zip_code": "33139",
+      "total_cost": 214375,
+      "cost_breakdown": {
+        "materials": 85750,
+        "labor": 75031,
+        "permits": 10718,
+        "design": 21437,
+        "contingency": 21437
+      },
+      "timeline_weeks": 20,
+      "timestamp": "2025-05-08T21:55:08.110882"
+    }
+  },
+  {
+    "id": "proj_11",
+    "text": "kitchen renovation with 247 square feet using luxury materials in 98101. Total cost: $79179.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 247,
+      "material_grade": "luxury",
+      "zip_code": "98101",
+      "total_cost": 79179,
+      "cost_breakdown": {
+        "materials": 31671,
+        "labor": 27712,
+        "permits": 3958,
+        "design": 7917,
+        "contingency": 7917
+      },
+      "timeline_weeks": 5,
+      "timestamp": "2025-05-08T21:55:08.110888"
+    }
+  },
+  {
+    "id": "proj_12",
+    "text": "addition renovation with 565 square feet using luxury materials in 90210. Total cost: $522576.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 565,
+      "material_grade": "luxury",
+      "zip_code": "90210",
+      "total_cost": 522576,
+      "cost_breakdown": {
+        "materials": 209030,
+        "labor": 182901,
+        "permits": 26128,
+        "design": 52257,
+        "contingency": 52257
+      },
+      "timeline_weeks": 19,
+      "timestamp": "2025-05-08T21:55:08.110893"
+    }
+  },
+  {
+    "id": "proj_13",
+    "text": "kitchen renovation with 168 square feet using premium materials in 60601. Total cost: $41982.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 168,
+      "material_grade": "premium",
+      "zip_code": "60601",
+      "total_cost": 41982,
+      "cost_breakdown": {
+        "materials": 16792,
+        "labor": 14693,
+        "permits": 2099,
+        "design": 4198,
+        "contingency": 4198
+      },
+      "timeline_weeks": 5,
+      "timestamp": "2025-05-08T21:55:08.110898"
+    }
+  },
+  {
+    "id": "proj_14",
+    "text": "addition renovation with 318 square feet using premium materials in 33139. Total cost: $126057.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 318,
+      "material_grade": "premium",
+      "zip_code": "33139",
+      "total_cost": 126057,
+      "cost_breakdown": {
+        "materials": 50422,
+        "labor": 44119,
+        "permits": 6302,
+        "design": 12605,
+        "contingency": 12605
+      },
+      "timeline_weeks": 19,
+      "timestamp": "2025-05-08T21:55:08.110903"
+    }
+  },
+  {
+    "id": "proj_15",
+    "text": "addition renovation with 231 square feet using standard materials in 60601. Total cost: $105930.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 231,
+      "material_grade": "standard",
+      "zip_code": "60601",
+      "total_cost": 105930,
+      "cost_breakdown": {
+        "materials": 42372,
+        "labor": 37075,
+        "permits": 5296,
+        "design": 10593,
+        "contingency": 10593
+      },
+      "timeline_weeks": 15,
+      "timestamp": "2025-05-08T21:55:08.110907"
+    }
+  },
+  {
+    "id": "proj_16",
+    "text": "addition renovation with 308 square feet using premium materials in 98101. Total cost: $123729.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 308,
+      "material_grade": "premium",
+      "zip_code": "98101",
+      "total_cost": 123729,
+      "cost_breakdown": {
+        "materials": 49491,
+        "labor": 43305,
+        "permits": 6186,
+        "design": 12372,
+        "contingency": 12372
+      },
+      "timeline_weeks": 14,
+      "timestamp": "2025-05-08T21:55:08.110912"
+    }
+  },
+  {
+    "id": "proj_17",
+    "text": "bathroom renovation with 78 square feet using luxury materials in 10001. Total cost: $36010.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 78,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 36010,
+      "cost_breakdown": {
+        "materials": 14404,
+        "labor": 12603,
+        "permits": 1800,
+        "design": 3601,
+        "contingency": 3601
+      },
+      "timeline_weeks": 6,
+      "timestamp": "2025-05-08T21:55:08.110918"
+    }
+  },
+  {
+    "id": "proj_18",
+    "text": "kitchen renovation with 181 square feet using standard materials in 98101. Total cost: $58920.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 181,
+      "material_grade": "standard",
+      "zip_code": "98101",
+      "total_cost": 58920,
+      "cost_breakdown": {
+        "materials": 23568,
+        "labor": 20622,
+        "permits": 2946,
+        "design": 5892,
+        "contingency": 5892
+      },
+      "timeline_weeks": 7,
+      "timestamp": "2025-05-08T21:55:08.110923"
+    }
+  },
+  {
+    "id": "proj_19",
+    "text": "bathroom renovation with 97 square feet using luxury materials in 98101. Total cost: $65360.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 97,
+      "material_grade": "luxury",
+      "zip_code": "98101",
+      "total_cost": 65360,
+      "cost_breakdown": {
+        "materials": 26144,
+        "labor": 22876,
+        "permits": 3268,
+        "design": 6536,
+        "contingency": 6536
+      },
+      "timeline_weeks": 8,
+      "timestamp": "2025-05-08T21:55:08.110927"
+    }
+  },
+  {
+    "id": "proj_20",
+    "text": "addition renovation with 682 square feet using premium materials in 98101. Total cost: $317517.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 682,
+      "material_grade": "premium",
+      "zip_code": "98101",
+      "total_cost": 317517,
+      "cost_breakdown": {
+        "materials": 127006,
+        "labor": 111130,
+        "permits": 15875,
+        "design": 31751,
+        "contingency": 31751
+      },
+      "timeline_weeks": 14,
+      "timestamp": "2025-05-08T21:55:08.110932"
+    }
+  },
+  {
+    "id": "proj_21",
+    "text": "addition renovation with 510 square feet using luxury materials in 33139. Total cost: $440710.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 510,
+      "material_grade": "luxury",
+      "zip_code": "33139",
+      "total_cost": 440710,
+      "cost_breakdown": {
+        "materials": 176284,
+        "labor": 154248,
+        "permits": 22035,
+        "design": 44071,
+        "contingency": 44071
+      },
+      "timeline_weeks": 10,
+      "timestamp": "2025-05-08T21:55:08.110937"
+    }
+  },
+  {
+    "id": "proj_22",
+    "text": "kitchen renovation with 216 square feet using standard materials in 90210. Total cost: $43626.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 216,
+      "material_grade": "standard",
+      "zip_code": "90210",
+      "total_cost": 43626,
+      "cost_breakdown": {
+        "materials": 17450,
+        "labor": 15269,
+        "permits": 2181,
+        "design": 4362,
+        "contingency": 4362
+      },
+      "timeline_weeks": 11,
+      "timestamp": "2025-05-08T21:55:08.110944"
+    }
+  },
+  {
+    "id": "proj_23",
+    "text": "bathroom renovation with 139 square feet using luxury materials in 10001. Total cost: $78817.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 139,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 78817,
+      "cost_breakdown": {
+        "materials": 31526,
+        "labor": 27585,
+        "permits": 3940,
+        "design": 7881,
+        "contingency": 7881
+      },
+      "timeline_weeks": 5,
+      "timestamp": "2025-05-08T21:55:08.110949"
+    }
+  },
+  {
+    "id": "proj_24",
+    "text": "bathroom renovation with 67 square feet using standard materials in 60601. Total cost: $24039.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 67,
+      "material_grade": "standard",
+      "zip_code": "60601",
+      "total_cost": 24039,
+      "cost_breakdown": {
+        "materials": 9615,
+        "labor": 8413,
+        "permits": 1201,
+        "design": 2403,
+        "contingency": 2403
+      },
+      "timeline_weeks": 7,
+      "timestamp": "2025-05-08T21:55:08.110954"
+    }
+  },
+  {
+    "id": "proj_25",
+    "text": "bathroom renovation with 70 square feet using luxury materials in 10001. Total cost: $36370.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 70,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 36370,
+      "cost_breakdown": {
+        "materials": 14548,
+        "labor": 12729,
+        "permits": 1818,
+        "design": 3637,
+        "contingency": 3637
+      },
+      "timeline_weeks": 4,
+      "timestamp": "2025-05-08T21:55:08.110959"
+    }
+  },
+  {
+    "id": "proj_26",
+    "text": "addition renovation with 746 square feet using premium materials in 60601. Total cost: $532479.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 746,
+      "material_grade": "premium",
+      "zip_code": "60601",
+      "total_cost": 532479,
+      "cost_breakdown": {
+        "materials": 212991,
+        "labor": 186367,
+        "permits": 26623,
+        "design": 53247,
+        "contingency": 53247
+      },
+      "timeline_weeks": 9,
+      "timestamp": "2025-05-08T21:55:08.110965"
+    }
+  },
+  {
+    "id": "proj_27",
+    "text": "kitchen renovation with 252 square feet using luxury materials in 60601. Total cost: $164080.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 252,
+      "material_grade": "luxury",
+      "zip_code": "60601",
+      "total_cost": 164080,
+      "cost_breakdown": {
+        "materials": 65632,
+        "labor": 57427,
+        "permits": 8204,
+        "design": 16408,
+        "contingency": 16408
+      },
+      "timeline_weeks": 9,
+      "timestamp": "2025-05-08T21:55:08.110970"
+    }
+  },
+  {
+    "id": "proj_28",
+    "text": "addition renovation with 525 square feet using luxury materials in 60601. Total cost: $432689.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 525,
+      "material_grade": "luxury",
+      "zip_code": "60601",
+      "total_cost": 432689,
+      "cost_breakdown": {
+        "materials": 173075,
+        "labor": 151441,
+        "permits": 21634,
+        "design": 43268,
+        "contingency": 43268
+      },
+      "timeline_weeks": 13,
+      "timestamp": "2025-05-08T21:55:08.110975"
+    }
+  },
+  {
+    "id": "proj_29",
+    "text": "addition renovation with 692 square feet using premium materials in 60601. Total cost: $339636.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 692,
+      "material_grade": "premium",
+      "zip_code": "60601",
+      "total_cost": 339636,
+      "cost_breakdown": {
+        "materials": 135854,
+        "labor": 118872,
+        "permits": 16981,
+        "design": 33963,
+        "contingency": 33963
+      },
+      "timeline_weeks": 14,
+      "timestamp": "2025-05-08T21:55:08.110986"
+    }
+  },
+  {
+    "id": "proj_30",
+    "text": "kitchen renovation with 168 square feet using standard materials in 90210. Total cost: $57200.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 168,
+      "material_grade": "standard",
+      "zip_code": "90210",
+      "total_cost": 57200,
+      "cost_breakdown": {
+        "materials": 22880,
+        "labor": 20020,
+        "permits": 2860,
+        "design": 5720,
+        "contingency": 5720
+      },
+      "timeline_weeks": 9,
+      "timestamp": "2025-05-08T21:55:08.110992"
+    }
+  },
+  {
+    "id": "proj_31",
+    "text": "kitchen renovation with 163 square feet using standard materials in 90210. Total cost: $25909.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 163,
+      "material_grade": "standard",
+      "zip_code": "90210",
+      "total_cost": 25909,
+      "cost_breakdown": {
+        "materials": 10363,
+        "labor": 9068,
+        "permits": 1295,
+        "design": 2590,
+        "contingency": 2590
+      },
+      "timeline_weeks": 10,
+      "timestamp": "2025-05-08T21:55:08.110996"
+    }
+  },
+  {
+    "id": "proj_32",
+    "text": "addition renovation with 293 square feet using standard materials in 90210. Total cost: $110946.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 293,
+      "material_grade": "standard",
+      "zip_code": "90210",
+      "total_cost": 110946,
+      "cost_breakdown": {
+        "materials": 44378,
+        "labor": 38831,
+        "permits": 5547,
+        "design": 11094,
+        "contingency": 11094
+      },
+      "timeline_weeks": 9,
+      "timestamp": "2025-05-08T21:55:08.111001"
+    }
+  },
+  {
+    "id": "proj_33",
+    "text": "bathroom renovation with 98 square feet using premium materials in 10001. Total cost: $48699.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 98,
+      "material_grade": "premium",
+      "zip_code": "10001",
+      "total_cost": 48699,
+      "cost_breakdown": {
+        "materials": 19479,
+        "labor": 17044,
+        "permits": 2434,
+        "design": 4869,
+        "contingency": 4869
+      },
+      "timeline_weeks": 6,
+      "timestamp": "2025-05-08T21:55:08.111006"
+    }
+  },
+  {
+    "id": "proj_34",
+    "text": "bathroom renovation with 96 square feet using luxury materials in 60601. Total cost: $43956.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 96,
+      "material_grade": "luxury",
+      "zip_code": "60601",
+      "total_cost": 43956,
+      "cost_breakdown": {
+        "materials": 17582,
+        "labor": 15384,
+        "permits": 2197,
+        "design": 4395,
+        "contingency": 4395
+      },
+      "timeline_weeks": 8,
+      "timestamp": "2025-05-08T21:55:08.111011"
+    }
+  },
+  {
+    "id": "proj_35",
+    "text": "bathroom renovation with 130 square feet using luxury materials in 60601. Total cost: $64151.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 130,
+      "material_grade": "luxury",
+      "zip_code": "60601",
+      "total_cost": 64151,
+      "cost_breakdown": {
+        "materials": 25660,
+        "labor": 22452,
+        "permits": 3207,
+        "design": 6415,
+        "contingency": 6415
+      },
+      "timeline_weeks": 4,
+      "timestamp": "2025-05-08T21:55:08.111017"
+    }
+  },
+  {
+    "id": "proj_36",
+    "text": "bathroom renovation with 75 square feet using standard materials in 98101. Total cost: $18213.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 75,
+      "material_grade": "standard",
+      "zip_code": "98101",
+      "total_cost": 18213,
+      "cost_breakdown": {
+        "materials": 7285,
+        "labor": 6374,
+        "permits": 910,
+        "design": 1821,
+        "contingency": 1821
+      },
+      "timeline_weeks": 8,
+      "timestamp": "2025-05-08T21:55:08.111022"
+    }
+  },
+  {
+    "id": "proj_37",
+    "text": "addition renovation with 204 square feet using luxury materials in 10001. Total cost: $202547.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 204,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 202547,
+      "cost_breakdown": {
+        "materials": 81018,
+        "labor": 70891,
+        "permits": 10127,
+        "design": 20254,
+        "contingency": 20254
+      },
+      "timeline_weeks": 17,
+      "timestamp": "2025-05-08T21:55:08.111028"
+    }
+  },
+  {
+    "id": "proj_38",
+    "text": "addition renovation with 374 square feet using standard materials in 60601. Total cost: $116378.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 374,
+      "material_grade": "standard",
+      "zip_code": "60601",
+      "total_cost": 116378,
+      "cost_breakdown": {
+        "materials": 46551,
+        "labor": 40732,
+        "permits": 5818,
+        "design": 11637,
+        "contingency": 11637
+      },
+      "timeline_weeks": 16,
+      "timestamp": "2025-05-08T21:55:08.111033"
+    }
+  },
+  {
+    "id": "proj_39",
+    "text": "bathroom renovation with 52 square feet using standard materials in 10001. Total cost: $18632.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 52,
+      "material_grade": "standard",
+      "zip_code": "10001",
+      "total_cost": 18632,
+      "cost_breakdown": {
+        "materials": 7452,
+        "labor": 6521,
+        "permits": 931,
+        "design": 1863,
+        "contingency": 1863
+      },
+      "timeline_weeks": 4,
+      "timestamp": "2025-05-08T21:55:08.111037"
+    }
+  },
+  {
+    "id": "proj_40",
+    "text": "kitchen renovation with 277 square feet using premium materials in 90210. Total cost: $134392.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 277,
+      "material_grade": "premium",
+      "zip_code": "90210",
+      "total_cost": 134392,
+      "cost_breakdown": {
+        "materials": 53756,
+        "labor": 47037,
+        "permits": 6719,
+        "design": 13439,
+        "contingency": 13439
+      },
+      "timeline_weeks": 11,
+      "timestamp": "2025-05-08T21:55:08.111042"
+    }
+  },
+  {
+    "id": "proj_41",
+    "text": "addition renovation with 586 square feet using premium materials in 60601. Total cost: $284932.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 586,
+      "material_grade": "premium",
+      "zip_code": "60601",
+      "total_cost": 284932,
+      "cost_breakdown": {
+        "materials": 113972,
+        "labor": 99726,
+        "permits": 14246,
+        "design": 28493,
+        "contingency": 28493
+      },
+      "timeline_weeks": 14,
+      "timestamp": "2025-05-08T21:55:08.111047"
+    }
+  },
+  {
+    "id": "proj_42",
+    "text": "kitchen renovation with 147 square feet using luxury materials in 10001. Total cost: $98323.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 147,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 98323,
+      "cost_breakdown": {
+        "materials": 39329,
+        "labor": 34413,
+        "permits": 4916,
+        "design": 9832,
+        "contingency": 9832
+      },
+      "timeline_weeks": 8,
+      "timestamp": "2025-05-08T21:55:08.111052"
+    }
+  },
+  {
+    "id": "proj_43",
+    "text": "bathroom renovation with 73 square feet using luxury materials in 10001. Total cost: $41703.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 73,
+      "material_grade": "luxury",
+      "zip_code": "10001",
+      "total_cost": 41703,
+      "cost_breakdown": {
+        "materials": 16681,
+        "labor": 14596,
+        "permits": 2085,
+        "design": 4170,
+        "contingency": 4170
+      },
+      "timeline_weeks": 7,
+      "timestamp": "2025-05-08T21:55:08.111058"
+    }
+  },
+  {
+    "id": "proj_44",
+    "text": "kitchen renovation with 297 square feet using premium materials in 90210. Total cost: $91754.",
+    "metadata": {
+      "project_type": "kitchen",
+      "square_feet": 297,
+      "material_grade": "premium",
+      "zip_code": "90210",
+      "total_cost": 91754,
+      "cost_breakdown": {
+        "materials": 36701,
+        "labor": 32113,
+        "permits": 4587,
+        "design": 9175,
+        "contingency": 9175
+      },
+      "timeline_weeks": 9,
+      "timestamp": "2025-05-08T21:55:08.111064"
+    }
+  },
+  {
+    "id": "proj_45",
+    "text": "addition renovation with 406 square feet using luxury materials in 60601. Total cost: $313209.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 406,
+      "material_grade": "luxury",
+      "zip_code": "60601",
+      "total_cost": 313209,
+      "cost_breakdown": {
+        "materials": 125283,
+        "labor": 109623,
+        "permits": 15660,
+        "design": 31320,
+        "contingency": 31320
+      },
+      "timeline_weeks": 16,
+      "timestamp": "2025-05-08T21:55:08.111069"
+    }
+  },
+  {
+    "id": "proj_46",
+    "text": "addition renovation with 718 square feet using premium materials in 33139. Total cost: $423313.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 718,
+      "material_grade": "premium",
+      "zip_code": "33139",
+      "total_cost": 423313,
+      "cost_breakdown": {
+        "materials": 169325,
+        "labor": 148159,
+        "permits": 21165,
+        "design": 42331,
+        "contingency": 42331
+      },
+      "timeline_weeks": 19,
+      "timestamp": "2025-05-08T21:55:08.111073"
+    }
+  },
+  {
+    "id": "proj_47",
+    "text": "bathroom renovation with 82 square feet using standard materials in 98101. Total cost: $19627.",
+    "metadata": {
+      "project_type": "bathroom",
+      "square_feet": 82,
+      "material_grade": "standard",
+      "zip_code": "98101",
+      "total_cost": 19627,
+      "cost_breakdown": {
+        "materials": 7850,
+        "labor": 6869,
+        "permits": 981,
+        "design": 1962,
+        "contingency": 1962
+      },
+      "timeline_weeks": 8,
+      "timestamp": "2025-05-08T21:55:08.111078"
+    }
+  },
+  {
+    "id": "proj_48",
+    "text": "addition renovation with 514 square feet using luxury materials in 98101. Total cost: $250215.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 514,
+      "material_grade": "luxury",
+      "zip_code": "98101",
+      "total_cost": 250215,
+      "cost_breakdown": {
+        "materials": 100086,
+        "labor": 87575,
+        "permits": 12510,
+        "design": 25021,
+        "contingency": 25021
+      },
+      "timeline_weeks": 20,
+      "timestamp": "2025-05-08T21:55:08.111083"
+    }
+  },
+  {
+    "id": "proj_49",
+    "text": "addition renovation with 428 square feet using premium materials in 90210. Total cost: $316941.",
+    "metadata": {
+      "project_type": "addition",
+      "square_feet": 428,
+      "material_grade": "premium",
+      "zip_code": "90210",
+      "total_cost": 316941,
+      "cost_breakdown": {
+        "materials": 126776,
+        "labor": 110929,
+        "permits": 15847,
+        "design": 31694,
+        "contingency": 31694
+      },
+      "timeline_weeks": 11,
+      "timestamp": "2025-05-08T21:55:08.111089"
+    }
+  }
+]

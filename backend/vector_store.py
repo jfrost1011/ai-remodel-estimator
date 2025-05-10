@@ -1,71 +1,39 @@
 import json
 import os
 import numpy as np
+import sys
+import pinecone
 from typing import List, Dict, Any, Optional
+from pinecone import Pinecone, ServerlessSpec
+
+# Import LangChain components
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import Pinecone as LangchainPinecone
+
+# Add the parent directory to the Python path
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+# Import our environment variable loader and data loader
+from utils.env_loader import load_env_vars
+from utils.data_loader import load_project_data, format_data_for_vector_store, save_project_data
 
 class MockVectorStore:
     """Simulated vector store for rapid development."""
     
     def __init__(self, data_file=None):
         """Initialize with synthetic data."""
-        # Try different file paths for the sample data
-        possible_files = [
-            "data/synthetic/renovation_projects.json",
-            "data/synthetic/sample_projects.json",
-            "data/synthetic/projects.json"
-        ]
+        # Use the centralized data loader utility
+        self.data = load_project_data(
+            data_file=data_file,
+            fallback_to_synthetic=True,
+            count=50,
+            return_formatted=True
+        )
         
-        # Use specified file if provided
-        if data_file:
-            possible_files.insert(0, data_file)
-        
-        # Try to load from any of the possible files
-        self.data = None
-        for file_path in possible_files:
-            if os.path.exists(file_path):
-                try:
-                    with open(file_path, "r") as f:
-                        raw_data = json.load(f)
-                    
-                    # Convert to vector store format if needed
-                    self.data = self._format_data(raw_data)
-                    print(f"Loaded {len(self.data)} projects from {file_path}")
-                    break
-                except Exception as e:
-                    print(f"Error loading {file_path}: {e}")
-        
-        # If no file found, generate synthetic data
-        if not self.data:
-            print("No data files found, generating synthetic data...")
-            from .data_generator import generate_synthetic_data
-            raw_data = generate_synthetic_data(50)
-            self.data = self._format_data(raw_data)
-    
-    def _format_data(self, raw_data):
-        """Format raw project data for vector store format."""
-        formatted_data = []
-        
-        for i, project in enumerate(raw_data):
-            # Check if already in vector store format
-            if isinstance(project, dict) and "id" in project and "metadata" in project:
-                formatted_data.append(project)
-                continue
-            
-            # Convert to vector store format
-            formatted_project = {
-                "id": project.get("id", f"proj-{i+1:04d}"),
-                "embedding": [0.1] * 10,  # Mock embedding
-                "text": (
-                    f"{project.get('project_type', 'renovation')} renovation with "
-                    f"{project.get('square_feet', 200)} square feet using "
-                    f"{project.get('material_grade', 'standard')} materials in "
-                    f"{project.get('zip_code', '00000')}"
-                ),
-                "metadata": project
-            }
-            formatted_data.append(formatted_project)
-        
-        return formatted_data
+        if self.data:
+            print(f"MockVectorStore initialized with {len(self.data)} projects")
+        else:
+            print("Warning: MockVectorStore initialized with empty dataset")
     
     def similarity_search(self, query, filter=None, k=3):
         """Simulate vector search with pre-selected results."""
@@ -134,77 +102,21 @@ class OpenAIVectorStore:
         # Set embedding model
         self.embedding_model = "text-embedding-3-small"
         
-        # Load or generate data
-        self.data = self._load_data(data_file)
+        # Use the centralized data loader utility
+        self.data = load_project_data(
+            data_file=data_file,
+            fallback_to_synthetic=True,
+            count=20,
+            return_formatted=True
+        )
         
+        if self.data:
+            print(f"OpenAIVectorStore initialized with {len(self.data)} projects")
+        else:
+            print("Warning: OpenAIVectorStore initialized with empty dataset")
+            
         # Generate embeddings if not already present
         self._ensure_embeddings()
-    
-    def _load_data(self, data_file):
-        """Load data from file or generate synthetic data."""
-        # Try different file paths
-        possible_files = [
-            "data/synthetic/renovation_projects.json",
-            "data/synthetic/sample_projects.json",
-            "data/synthetic/projects.json"
-        ]
-        
-        if data_file:
-            possible_files.insert(0, data_file)
-        
-        # Try to load data
-        data = None
-        for file_path in possible_files:
-            if os.path.exists(file_path):
-                try:
-                    with open(file_path, "r") as f:
-                        raw_data = json.load(f)
-                    
-                    data = self._format_data(raw_data)
-                    print(f"Loaded {len(data)} projects from {file_path}")
-                    break
-                except Exception as e:
-                    print(f"Error loading {file_path}: {e}")
-        
-        # Generate data if none found
-        if not data:
-            print("No data files found, generating synthetic data...")
-            from .data_generator import generate_synthetic_data
-            raw_data = generate_synthetic_data(20)
-            data = self._format_data(raw_data)
-        
-        return data
-    
-    def _format_data(self, raw_data):
-        """Format data for vector storage."""
-        formatted_data = []
-        
-        for i, project in enumerate(raw_data):
-            # Check if already in correct format
-            if isinstance(project, dict) and "id" in project and "metadata" in project:
-                # Make sure there's a text field for embedding
-                if "text" not in project:
-                    project["text"] = (
-                        f"{project['metadata'].get('project_type', 'renovation')} renovation with "
-                        f"{project['metadata'].get('square_feet', 200)} square feet using "
-                        f"{project['metadata'].get('material_grade', 'standard')} materials"
-                    )
-                formatted_data.append(project)
-                continue
-            
-            # Convert to vector store format
-            formatted_project = {
-                "id": project.get("id", f"proj-{i+1:04d}"),
-                "text": (
-                    f"{project.get('project_type', 'renovation')} renovation with "
-                    f"{project.get('square_feet', 200)} square feet using "
-                    f"{project.get('material_grade', 'standard')} materials"
-                ),
-                "metadata": project
-            }
-            formatted_data.append(formatted_project)
-        
-        return formatted_data
     
     def _ensure_embeddings(self):
         """Generate embeddings for all data points if not present."""
@@ -244,9 +156,7 @@ class OpenAIVectorStore:
     
     def _save_embeddings(self):
         """Save data with embeddings to disk."""
-        os.makedirs("data/embeddings", exist_ok=True)
-        
-        # Filter out the embedding vectors to save disk space
+        # Use the centralized data saving utility
         save_data = []
         for doc in self.data:
             doc_copy = doc.copy()
@@ -256,8 +166,7 @@ class OpenAIVectorStore:
                     doc_copy["embedding"] = doc_copy["embedding"].tolist()
             save_data.append(doc_copy)
         
-        with open("data/embeddings/embedded_projects.json", "w") as f:
-            json.dump(save_data, f)
+        save_project_data(save_data, "data/embeddings/embedded_projects.json")
     
     def similarity_search(self, query: str, filter: Optional[Dict[str, Any]] = None, k: int = 3) -> List[Dict]:
         """Search for documents similar to the query."""
@@ -305,213 +214,146 @@ class OpenAIVectorStore:
 
 
 class PineconeVectorStore:
-    """Vector store implementation using Pinecone as the backend and OpenAI embeddings."""
+    """
+    Vector store implementation using Pinecone for similarity search.
+    """
     
-    def __init__(self, data_file=None):
-        """Initialize with data from file, OpenAI embeddings, and Pinecone storage."""
-        # Check for required packages
-        try:
-            from openai import OpenAI
-            from pinecone import Pinecone, PodSpec
-        except ImportError:
-            raise ImportError("Required packages not found. Install with 'pip install openai pinecone-client'")
+    def __init__(self):
+        """Initialize the Pinecone vector store."""
+        # Load environment variables
+        if not load_env_vars():
+            raise EnvironmentError("Failed to load required environment variables")
         
-        # Check for API keys
-        self.openai_api_key = os.environ.get("OPENAI_API_KEY")
-        self.pinecone_api_key = os.environ.get("PINECONE_API_KEY")
-        self.pinecone_environment = os.environ.get("PINECONE_ENVIRONMENT")
-        self.pinecone_index_name = os.environ.get("PINECONE_INDEX", "renovation-estimator")
+        # Get Pinecone configuration from environment variables
+        self.api_key = os.getenv("PINECONE_API_KEY")
+        self.environment = os.getenv("PINECONE_ENVIRONMENT", "us-east-1")
+        self.index_name = os.getenv("PINECONE_INDEX", "renovation-estimator")
         
-        if not self.openai_api_key:
-            raise ValueError("OpenAI API key not found in environment variables")
-        if not self.pinecone_api_key:
-            raise ValueError("Pinecone API key not found in environment variables")
-        if not self.pinecone_environment:
-            raise ValueError("Pinecone environment not found in environment variables")
+        if not self.api_key:
+            raise ValueError("PINECONE_API_KEY environment variable is required")
         
-        # Initialize OpenAI client
-        self.openai_client = OpenAI(api_key=self.openai_api_key)
+        # Initialize Pinecone with the new API
+        self.pc = Pinecone(api_key=self.api_key)
         
-        # Set embedding model
-        self.embedding_model = "text-embedding-3-small"
-        self.embedding_dimension = 1536  # Dimension for text-embedding-3-small
+        # Check if index exists, create if it doesn't
+        existing_indexes = self.pc.list_indexes()
+        index_names = [index.name for index in existing_indexes]
         
-        # Initialize Pinecone
-        self.pinecone = Pinecone(api_key=self.pinecone_api_key)
-        
-        # Check if index exists, create if not
-        try:
-            indexes = self.pinecone.list_indexes()
-            if self.pinecone_index_name not in [index.name for index in indexes]:
-                print(f"Creating Pinecone index '{self.pinecone_index_name}'...")
-                self.pinecone.create_index(
-                    name=self.pinecone_index_name,
-                    dimension=self.embedding_dimension,
-                    metric="cosine",
-                    spec=PodSpec(environment=self.pinecone_environment)
+        if self.index_name not in index_names:
+            print(f"Creating Pinecone index: {self.index_name}")
+            self.pc.create_index(
+                name=self.index_name,
+                dimension=1536,  # OpenAI embeddings dimension
+                metric="cosine",
+                spec=ServerlessSpec(
+                    cloud="aws",
+                    region=self.environment
                 )
-            
-            # Connect to index
-            self.index = self.pinecone.Index(self.pinecone_index_name)
-            print(f"Connected to Pinecone index '{self.pinecone_index_name}'")
-            
-            # Check if we need to populate the index
-            stats = self.index.describe_index_stats()
-            vector_count = stats.namespaces[""].vector_count if "" in stats.namespaces else 0
-            
-            if vector_count == 0:
-                print("Index is empty, loading initial data...")
-                self._load_and_index_data(data_file)
-            else:
-                print(f"Index already contains {vector_count} vectors")
-        
-        except Exception as e:
-            print(f"Error initializing Pinecone: {e}")
-            raise
-    
-    def _load_and_index_data(self, data_file):
-        """Load data and index it in Pinecone."""
-        # Try different file paths
-        possible_files = [
-            "data/synthetic/renovation_projects.json",
-            "data/synthetic/sample_projects.json",
-            "data/synthetic/projects.json"
-        ]
-        
-        if data_file:
-            possible_files.insert(0, data_file)
-        
-        # Try to load data
-        raw_data = None
-        for file_path in possible_files:
-            if os.path.exists(file_path):
-                try:
-                    with open(file_path, "r") as f:
-                        raw_data = json.load(f)
-                    print(f"Loaded {len(raw_data)} projects from {file_path}")
-                    break
-                except Exception as e:
-                    print(f"Error loading {file_path}: {e}")
-        
-        # Generate data if none found
-        if not raw_data:
-            print("No data files found, generating synthetic data...")
-            from .data_generator import generate_synthetic_data
-            raw_data = generate_synthetic_data(20)
-        
-        # Process and index the data
-        self._index_data(raw_data)
-    
-    def _index_data(self, raw_data):
-        """Generate embeddings and index the data in Pinecone."""
-        # Format data
-        formatted_data = []
-        for i, project in enumerate(raw_data):
-            # Check if already in vector store format
-            if isinstance(project, dict) and "id" in project and "metadata" in project:
-                # Make sure there's a text field for embedding
-                if "text" not in project:
-                    project["text"] = (
-                        f"{project['metadata'].get('project_type', 'renovation')} renovation with "
-                        f"{project['metadata'].get('square_feet', 200)} square feet using "
-                        f"{project['metadata'].get('material_grade', 'standard')} materials"
-                    )
-                formatted_data.append(project)
-            else:
-                # Convert to vector store format
-                formatted_project = {
-                    "id": project.get("id", f"proj-{i+1:04d}"),
-                    "text": (
-                        f"{project.get('project_type', 'renovation')} renovation with "
-                        f"{project.get('square_feet', 200)} square feet using "
-                        f"{project.get('material_grade', 'standard')} materials"
-                    ),
-                    "metadata": project
-                }
-                formatted_data.append(formatted_project)
-        
-        # Process in batches to avoid rate limits
-        batch_size = 5
-        for i in range(0, len(formatted_data), batch_size):
-            batch = formatted_data[i:i+batch_size]
-            
-            # Get text for embedding
-            texts = [doc["text"] for doc in batch]
-            
-            # Generate embeddings
-            try:
-                response = self.openai_client.embeddings.create(
-                    model=self.embedding_model,
-                    input=texts
-                )
-                
-                # Prepare vectors for Pinecone
-                vectors_to_upsert = []
-                for j, embedding_data in enumerate(response.data):
-                    doc = batch[j]
-                    vectors_to_upsert.append({
-                        "id": doc["id"],
-                        "values": embedding_data.embedding,
-                        "metadata": {
-                            "text": doc["text"],
-                            "project_type": doc["metadata"].get("project_type", ""),
-                            "square_feet": doc["metadata"].get("square_feet", 0),
-                            "material_grade": doc["metadata"].get("material_grade", ""),
-                            "total_cost": doc["metadata"].get("total_cost", 0)
-                        }
-                    })
-                
-                # Upsert to Pinecone
-                self.index.upsert(vectors=vectors_to_upsert)
-                print(f"Indexed batch of {len(vectors_to_upsert)} vectors")
-            
-            except Exception as e:
-                print(f"Error generating embeddings or indexing: {e}")
-    
-    def similarity_search(self, query: str, filter: Optional[Dict[str, Any]] = None, k: int = 3) -> List[Dict]:
-        """Search for documents similar to the query using Pinecone."""
-        try:
-            # Generate embedding for query
-            response = self.openai_client.embeddings.create(
-                model=self.embedding_model,
-                input=[query]
             )
-            query_embedding = response.data[0].embedding
-            
-            # Convert filter to Pinecone format if provided
-            pinecone_filter = {}
-            if filter:
-                for key, value in filter.items():
-                    pinecone_filter[key] = {"$eq": value}
-            
-            # Search Pinecone
-            results = self.index.query(
-                vector=query_embedding,
-                top_k=k,
-                include_metadata=True,
-                filter=pinecone_filter if pinecone_filter else None
-            )
-            
-            # Format results to match our expected format
-            formatted_results = []
-            for match in results.matches:
-                formatted_results.append({
-                    "id": match.id,
-                    "similarity": match.score,
-                    "text": match.metadata.get("text", ""),
-                    "metadata": {
-                        "project_type": match.metadata.get("project_type", ""),
-                        "square_feet": match.metadata.get("square_feet", 0),
-                        "material_grade": match.metadata.get("material_grade", ""),
-                        "total_cost": match.metadata.get("total_cost", 0)
-                    }
-                })
-            
-            return formatted_results
         
-        except Exception as e:
-            print(f"Error searching Pinecone: {e}")
-            return []
+        # Connect to the index
+        self.index = self.pc.Index(self.index_name)
+        print(f"Connected to Pinecone index: {self.index_name}")
+    
+    def add_texts(self, texts: List[str], metadatas: Optional[List[Dict[str, Any]]] = None) -> List[str]:
+        """
+        Add texts to the vector store.
+        
+        Args:
+            texts: List of text strings to add
+            metadatas: Optional list of metadata dictionaries
+            
+        Returns:
+            List of IDs for the added texts
+        """
+        from langchain_openai import OpenAIEmbeddings
+        
+        # Initialize embeddings model
+        embeddings = OpenAIEmbeddings(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model="text-embedding-3-small"
+        )
+        
+        # Generate embeddings for texts
+        vectors = embeddings.embed_documents(texts)
+        
+        # Generate IDs if not provided
+        ids = [f"text_{i}" for i in range(len(texts))]
+        
+        # Prepare vectors for upsert
+        vectors_to_upsert = []
+        for i, (text, vector) in enumerate(zip(texts, vectors)):
+            metadata = metadatas[i] if metadatas and i < len(metadatas) else {}
+            metadata["text"] = text  # Store the original text in metadata
+            vectors_to_upsert.append({
+                "id": ids[i],
+                "values": vector,
+                "metadata": metadata
+            })
+        
+        # Upsert vectors to Pinecone
+        self.index.upsert(vectors=vectors_to_upsert)
+        
+        return ids
+    
+    def similarity_search(self, query: str, k: int = 3) -> List[Dict[str, Any]]:
+        """
+        Search for similar texts using the query string.
+        
+        Args:
+            query: Query string
+            k: Number of results to return
+            
+        Returns:
+            List of dictionaries containing text and metadata
+        """
+        from langchain_openai import OpenAIEmbeddings
+        
+        # Initialize embeddings model
+        embeddings = OpenAIEmbeddings(
+            api_key=os.getenv("OPENAI_API_KEY"),
+            model="text-embedding-3-small"
+        )
+        
+        # Generate embedding for query
+        query_embedding = embeddings.embed_query(query)
+        
+        # Query Pinecone
+        results = self.index.query(
+            vector=query_embedding,
+            top_k=k,
+            include_metadata=True
+        )
+        
+        # Format results
+        formatted_results = []
+        for match in results.matches:
+            formatted_results.append({
+                "id": match.id,
+                "score": match.score,
+                "text": match.metadata.get("text", ""),
+                "metadata": {k: v for k, v in match.metadata.items() if k != "text"}
+            })
+        
+        return formatted_results
+    
+    def delete(self, ids: List[str]) -> None:
+        """
+        Delete vectors by ID.
+        
+        Args:
+            ids: List of IDs to delete
+        """
+        self.index.delete(ids=ids)
+    
+    def get_stats(self) -> Dict[str, Any]:
+        """
+        Get statistics about the index.
+        
+        Returns:
+            Dictionary of index statistics
+        """
+        return self.index.describe_index_stats()
 
 
 # Factory function to get the appropriate vector store
@@ -536,15 +378,12 @@ def get_vector_store(use_mock=False, use_pinecone=False, data_file=None):
     if use_pinecone or os.environ.get("USE_PINECONE", "false").lower() == "true":
         try:
             print("Using PineconeVectorStore")
-            return PineconeVectorStore(data_file)
+            return PineconeVectorStore()
         except (ImportError, ValueError) as e:
             print(f"Error initializing PineconeVectorStore: {e}")
             print("Falling back to OpenAIVectorStore")
+            return OpenAIVectorStore(data_file)
     
-    try:
-        print("Using OpenAIVectorStore")
-        return OpenAIVectorStore(data_file)
-    except (ImportError, ValueError) as e:
-        print(f"Error initializing OpenAIVectorStore: {e}")
-        print("Falling back to MockVectorStore")
-        return MockVectorStore(data_file)
+    # Default to OpenAI vector store
+    print("Using OpenAIVectorStore")
+    return OpenAIVectorStore(data_file)
