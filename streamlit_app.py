@@ -1,12 +1,18 @@
 """
 Renovation Cost Estimator Application
 
-This is the main Streamlit application for the Renovation Cost Estimator.
+This is the main application for the Renovation Cost Estimator.
+It serves as the entry point for Streamlit and handles navigation and page routing.
 """
 
 import streamlit as st
+from dotenv import load_dotenv
+from ui.pages import pages
 
-# 🔹 FIRST Streamlit command on the page 🔹
+# Load environment variables
+load_dotenv()
+
+# Page configuration
 st.set_page_config(
     page_title="Renovation Cost Estimator",
     page_icon="🏠",
@@ -14,44 +20,50 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-import os
-import sys
-from pathlib import Path
+# App styling
+st.markdown("""
+<style>
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 2px;
+    }
+    .stTabs [data-baseweb="tab"] {
+        height: 50px;
+        white-space: pre-wrap;
+        background-color: #f0f2f6;
+        border-radius: 4px 4px 0 0;
+        gap: 1px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+    }
+    .stTabs [aria-selected="true"] {
+        background-color: #e6f0ff;
+        border-bottom: 2px solid #4b78e6;
+    }
+</style>
+""", unsafe_allow_html=True)
 
-# Add the current directory to Python path to ensure imports work correctly
-project_root = Path(__file__).parent.absolute()
-sys.path.append(str(project_root))
+# Sidebar navigation
+def main():
+    page = st.sidebar.radio("Navigation", list(pages.keys()))
+    st.sidebar.markdown("---")
+    
+    # Display the selected page
+    pages[page]()
+    
+    # Footer
+    st.sidebar.markdown("---")
+    st.sidebar.markdown("#### About")
+    st.sidebar.info(
+        """
+        This app provides cost estimates for common renovation projects.
+        
+        © 2023 HomeAdvisorAI
+        """
+    )
 
-# Import dependencies
-from dotenv import load_dotenv
-
-# Import the UI pages
-from ui.pages import pages
-
-# Load environment variables
-load_dotenv()
-
-# Set up logging
-import logging
-log_level = os.environ.get("LOG_LEVEL", "INFO")
-logging.basicConfig(level=getattr(logging, log_level))
-logger = logging.getLogger(__name__)
-
-# Set default environment variables for the app
-os.environ.setdefault("EMBEDDING_MODEL_PATH", "jfrost10/renovation-cost-estimator-fine-tune")
-os.environ.setdefault("MOCK_DATA", "true")
-os.environ.setdefault("USE_PINECONE", "false")
-
-# Create the sidebar
-st.sidebar.title("🏠 Renovation Estimator")
-st.sidebar.markdown("---")
-
-# Navigation
-choice = st.sidebar.radio("Navigation", list(pages.keys()))
-
-# Credits
-st.sidebar.markdown("---")
-st.sidebar.caption("© 2024 Renovation Estimator")
-
-# Render the selected page
-pages[choice]()
+if __name__ == "__main__":
+    main()
