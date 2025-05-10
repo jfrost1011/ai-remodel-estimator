@@ -21,7 +21,7 @@ mpl.rcParams['grid.linewidth'] = 0.5
 
 def render_home():
     st.title("🏠 AI Remodel Cost Estimator")
-    st.write("Enter your project details in the sidebar ➡️")
+    st.write("Enter your project details in the sidebar ⬅️")
     
     st.markdown("""
     ## Welcome to the Renovation Cost Estimator!
