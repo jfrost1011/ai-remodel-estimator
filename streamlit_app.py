@@ -1,250 +1,110 @@
 """
-Streamlit Cloud Entry Point for Renovation Cost Estimator
+Renovation Cost Estimator Application
 
-This file serves as the main entry point for Streamlit Cloud deployment.
-It imports and runs the full functionality of the renovation estimator app.
-If dependencies are missing, it falls back to a simplified version.
+This is the main Streamlit application for the Renovation Cost Estimator.
 """
+
 import os
 import sys
 from pathlib import Path
-import traceback
 
-# Print Python version and other diagnostic info for debugging
-import platform
-print(f"Python version: {platform.python_version()}")
-
-# Try to print package versions for diagnostic purposes
-try:
-    print("Checking installed package versions:")
-    # Import pip to get version information
-    import pkg_resources
-    
-    # List of packages to check
-    packages_to_check = [
-        "langchain", "langchain-core", "langchain-community", 
-        "langchain-pinecone", "langsmith", "streamlit", "pandas"
-    ]
-    
-    # Check each package version
-    for package in packages_to_check:
-        try:
-            version = pkg_resources.get_distribution(package).version
-            print(f"  {package}: {version}")
-        except pkg_resources.DistributionNotFound:
-            print(f"  {package}: Not installed")
-    print("Package check complete")
-except Exception as e:
-    print(f"Error checking package versions: {e}")
-
-# Add the project root to Python path
+# Add the current directory to Python path to ensure imports work correctly
 project_root = Path(__file__).parent.absolute()
-renovation_dir = project_root / "renovation-estimator"
-sys.path.append(str(renovation_dir))
 sys.path.append(str(project_root))
 
-# Set default environment variables
-os.environ.setdefault("EMBEDDING_MODEL_PATH", "text-embedding-3-small")
+# Import dependencies
+import streamlit as st
+from dotenv import load_dotenv
+
+# Load environment variables
+load_dotenv()
+
+# Set up logging
+import logging
+log_level = os.environ.get("LOG_LEVEL", "INFO")
+logging.basicConfig(level=getattr(logging, log_level))
+logger = logging.getLogger(__name__)
+
+# Set default environment variables for the app
+os.environ.setdefault("EMBEDDING_MODEL_PATH", "jfrost10/renovation-cost-estimator-fine-tune")
 os.environ.setdefault("MOCK_DATA", "true")
 os.environ.setdefault("USE_PINECONE", "false")
-os.environ.setdefault("LOG_LEVEL", "INFO")
-os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")  # Prevents warnings
 
-# Import streamlit for the fallback app
-import streamlit as st
+# Try-except blocks for imports to handle potential import errors gracefully
+try:
+    # Import pages
+    from backend.estimator import get_cost_estimate
+    from backend.vector_search import search_similar_projects
+    from utils.data_loader import load_sample_data
+    from utils.visualization import create_cost_breakdown_chart, create_timeline_chart
+except ImportError as e:
+    logger.error(f"Error importing backend modules: {e}")
+    st.error(f"Failed to load backend modules: {e}")
 
-def run_full_app():
-    """Try to run the full app with all features."""
+try:
+    # Import UI components
+    from ui.home import render_home_page
+    from ui.estimate import render_estimate_page
+    from ui.search import render_search_page
+    from ui.dashboard import render_dashboard_page
+    from ui.admin import render_admin_page
+except ImportError as e:
+    logger.error(f"Error importing UI components: {e}")
+    st.error(f"Failed to load UI components: {e}")
+
+# Configure the app
+st.set_page_config(
+    page_title="Renovation Cost Estimator",
+    page_icon="🏠",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# Define the main function
+def main():
+    """Main application function that handles page rendering."""
     try:
-        print("Importing app module...")
-        sys.path.insert(0, str(renovation_dir))
-        from app import main
-        print("Successfully imported app module")
-        return main
-    except ImportError as e:
-        print(f"Error importing app module: {e}")
-        print("Available modules in path:")
-        for p in sys.path:
-            print(f"  - {p}")
-        
-        print("Searching for app.py...")
-        import glob
-        for path in glob.glob("**/*.py", recursive=True):
-            if "app.py" in path:
-                print(f"Found: {path}")
-        return None
-
-def run_cloud_app():
-    """Run the simplified cloud app."""
-    try:
-        print("Trying to import cloud_app...")
-        import cloud_app
-        print("Successfully imported cloud_app")
-        return True
-    except ImportError as e:
-        print(f"Error importing cloud_app: {e}")
-        return False
-
-def run_fallback_app():
-    """Run an extremely simple app directly in this file."""
-    print("Running fallback app directly")
-    
-    import pandas as pd
-    import numpy as np
-    import matplotlib.pyplot as plt
-    
-    # Set up the page
-    st.set_page_config(
-        page_title="Renovation Cost Estimator",
-        page_icon="🏠",
-        layout="wide"
-    )
-    
-    # Main app header
-    st.title("🏠 Renovation Cost Estimator")
-    st.subheader("Fallback Version")
-    
-    st.warning("""
-    This is a simplified fallback version of the Renovation Cost Estimator.
-    The full version couldn't be loaded due to dependency issues.
-    """)
-    
-    # Add detailed diagnostic information
-    with st.expander("Dependency Conflict Information", expanded=True):
-        st.error("""
-        **Dependency Conflict Detected**
-        
-        The app failed to start due to a package version conflict. The most common issue is:
-        
-        - LangChain 0.2.5 requires LangSmith ≥ 0.1.17 and < 0.2.0
-        - But an older version of LangSmith may be specified in requirements.txt
-        
-        This has been fixed in the latest version. If you're seeing this message, please try:
-        1. Refreshing the page
-        2. If that doesn't work, the app owner should update the requirements.txt file
-        """)
-        
-        st.subheader("System Information")
-        st.code(f"Python version: {platform.python_version()}")
-        
-        st.subheader("Package Versions")
-        
-        # Try to get package versions
-        packages_info = []
-        for package in ["langchain", "langchain-core", "langchain-community", "langsmith", "streamlit", "pandas"]:
-            try:
-                version = pkg_resources.get_distribution(package).version
-                packages_info.append({"Package": package, "Version": version})
-            except:
-                packages_info.append({"Package": package, "Version": "Not installed or version unknown"})
-        
-        # Display as a table
-        st.table(pd.DataFrame(packages_info))
-        
-        st.subheader("How to Fix")
-        st.markdown("""
-        If you're the app owner, update your requirements.txt file with these compatible versions:
-        ```
-        langchain==0.2.5
-        langchain-community==0.2.5
-        langchain-core==0.2.7
-        langsmith==0.1.17  # This must be 0.1.17 or newer
-        ```
-        """)
-    
-    st.markdown("""
-    The complete version includes:
-    - Cost estimation based on project details
-    - Semantic search for similar projects
-    - Visualization of cost breakdowns
-    - PDF report generation
-    """)
-    
-    # Sample data for demonstration
-    sample_projects = [
-        {"type": "Kitchen", "size": 200, "grade": "Premium", "cost": 45000},
-        {"type": "Bathroom", "size": 100, "grade": "Standard", "cost": 25000},
-        {"type": "Addition", "size": 400, "grade": "Luxury", "cost": 150000}
-    ]
-    
-    # Convert to DataFrame
-    df = pd.DataFrame(sample_projects)
-    
-    # Display sample data
-    st.subheader("Sample Renovation Projects")
-    st.dataframe(df)
-    
-    # Simple interactive elements
-    st.subheader("Try a Simple Estimate")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        project_type = st.selectbox("Project Type", ["Kitchen", "Bathroom", "Addition"])
-        square_feet = st.slider("Square Footage", 50, 1000, 200)
-    
-    with col2:
-        material_grade = st.radio("Material Grade", ["Standard", "Premium", "Luxury"])
-    
-    # Simple calculation for demo
-    base_costs = {
-        "Kitchen": 200,
-        "Bathroom": 250,
-        "Addition": 300
-    }
-    
-    multipliers = {
-        "Standard": 1.0,
-        "Premium": 1.5,
-        "Luxury": 2.2
-    }
-    
-    # Calculate estimated cost
-    base_cost = base_costs.get(project_type, 200)
-    multiplier = multipliers.get(material_grade, 1.0)
-    estimated_cost = base_cost * square_feet * multiplier
-    
-    # Display result
-    st.subheader("Estimated Cost")
-    st.metric("Total Cost", f"${int(estimated_cost):,}")
-    
-    # Create a simple chart
-    st.subheader("Cost Breakdown")
-    fig, ax = plt.subplots()
-    breakdown = {
-        "Materials": 0.4 * estimated_cost,
-        "Labor": 0.35 * estimated_cost,
-        "Permits": 0.1 * estimated_cost,
-        "Design": 0.15 * estimated_cost
-    }
-    
-    ax.bar(breakdown.keys(), breakdown.values())
-    ax.set_ylabel("Cost ($)")
-    ax.set_title("Cost Breakdown")
-    for i, v in enumerate(breakdown.values()):
-        ax.text(i, v + 1000, f"${int(v):,}", ha='center')
-    
-    st.pyplot(fig)
-    
-    # Footer
-    st.markdown("---")
-    st.caption("© 2024 Renovation Estimator - Fallback Version")
-
-# If running this file directly
-if __name__ == "__main__":
-    try:
-        # Try to run the full app
-        main_func = run_full_app()
-        if main_func:
-            main_func()
-        # If that fails, try the cloud app
-        elif run_cloud_app():
-            pass  # cloud_app already runs when imported
-        # If that also fails, run the built-in fallback
-        else:
-            run_fallback_app()
+        # Save selected page in session state for navigation between pages
+        if "sidebar_selection" not in st.session_state:
+            st.session_state.sidebar_selection = "Home"
+            
+        # Create sidebar for navigation
+        with st.sidebar:
+            st.title("Renovation Estimator")
+            st.markdown("---")
+            
+            # Navigation options
+            selected_page = st.radio(
+                "Navigate to:",
+                ["Home", "Cost Estimator", "Smart Search", "Dashboard", "Admin"],
+                index=["Home", "Cost Estimator", "Smart Search", "Dashboard", "Admin"].index(st.session_state.sidebar_selection)
+            )
+            
+            # Update session state
+            st.session_state.sidebar_selection = selected_page
+            
+            st.markdown("---")
+            st.caption("© 2024 Renovation Estimator")
+            
+        # Render the selected page
+        try:
+            if selected_page == "Home":
+                render_home_page()
+            elif selected_page == "Cost Estimator":
+                render_estimate_page()
+            elif selected_page == "Smart Search":
+                render_search_page()
+            elif selected_page == "Dashboard":
+                render_dashboard_page()
+            elif selected_page == "Admin":
+                render_admin_page()
+        except Exception as e:
+            logger.error(f"Error rendering page {selected_page}: {e}")
+            st.error(f"Error loading page: {e}")
+            st.info("Try restarting the application or contact support if the issue persists.")
     except Exception as e:
-        print(f"Error running app: {e}")
-        traceback.print_exc()
-        st.error(f"Error loading the application: {e}")
-        run_fallback_app() 
+        logger.error(f"Critical application error: {e}")
+        st.error("The application encountered a critical error. Please restart.")
+
+if __name__ == "__main__":
+    main()
