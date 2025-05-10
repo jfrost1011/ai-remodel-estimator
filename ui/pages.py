@@ -47,7 +47,6 @@ def render_home():
     - Regional cost adjustments based on ZIP code
     - Detailed cost breakdowns by category
     - Timeline estimates
-    - Historical project comparisons
     - Export options for your estimate
     
     To get started, select "Estimator" from the navigation.
