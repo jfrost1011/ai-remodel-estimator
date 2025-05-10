@@ -23,7 +23,7 @@ try:
     # List of packages to check
     packages_to_check = [
         "langchain", "langchain-core", "langchain-community", 
-        "langchain-pinecone", "streamlit", "pandas"
+        "langchain-pinecone", "langsmith", "streamlit", "pandas"
     ]
     
     # Check each package version
@@ -109,14 +109,29 @@ def run_fallback_app():
     The full version couldn't be loaded due to dependency issues.
     """)
     
-    # Add diagnostic information
-    with st.expander("Diagnostic Information"):
+    # Add detailed diagnostic information
+    with st.expander("Dependency Conflict Information", expanded=True):
+        st.error("""
+        **Dependency Conflict Detected**
+        
+        The app failed to start due to a package version conflict. The most common issue is:
+        
+        - LangChain 0.2.5 requires LangSmith ≥ 0.1.17 and < 0.2.0
+        - But an older version of LangSmith may be specified in requirements.txt
+        
+        This has been fixed in the latest version. If you're seeing this message, please try:
+        1. Refreshing the page
+        2. If that doesn't work, the app owner should update the requirements.txt file
+        """)
+        
+        st.subheader("System Information")
         st.code(f"Python version: {platform.python_version()}")
+        
         st.subheader("Package Versions")
         
         # Try to get package versions
         packages_info = []
-        for package in ["langchain", "langchain-core", "langchain-community", "streamlit", "pandas"]:
+        for package in ["langchain", "langchain-core", "langchain-community", "langsmith", "streamlit", "pandas"]:
             try:
                 version = pkg_resources.get_distribution(package).version
                 packages_info.append({"Package": package, "Version": version})
@@ -125,6 +140,17 @@ def run_fallback_app():
         
         # Display as a table
         st.table(pd.DataFrame(packages_info))
+        
+        st.subheader("How to Fix")
+        st.markdown("""
+        If you're the app owner, update your requirements.txt file with these compatible versions:
+        ```
+        langchain==0.2.5
+        langchain-community==0.2.5
+        langchain-core==0.2.7
+        langsmith==0.1.17  # This must be 0.1.17 or newer
+        ```
+        """)
     
     st.markdown("""
     The complete version includes:
