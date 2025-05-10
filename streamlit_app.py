@@ -4,6 +4,16 @@ Renovation Cost Estimator Application
 This is the main Streamlit application for the Renovation Cost Estimator.
 """
 
+import streamlit as st
+
+# 🔹 FIRST Streamlit command on the page 🔹
+st.set_page_config(
+    page_title="Renovation Cost Estimator",
+    page_icon="🏠",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
 import os
 import sys
 from pathlib import Path
@@ -13,7 +23,6 @@ project_root = Path(__file__).parent.absolute()
 sys.path.append(str(project_root))
 
 # Import dependencies
-import streamlit as st
 from dotenv import load_dotenv
 
 # Load environment variables
@@ -34,7 +43,8 @@ os.environ.setdefault("USE_PINECONE", "false")
 try:
     # Import backend modules
     from backend import get_cost_estimate, search_similar_projects
-    from renovation_estimator.utils.data_loader import load_sample_data
+    from backend.data_generator import generate_sample_data
+    from utils.data_loader import load_sample_data
 except ImportError as e:
     logger.error(f"Error importing backend modules: {e}")
     st.error(f"Failed to load backend modules: {e}")
@@ -45,14 +55,6 @@ try:
 except ImportError as e:
     logger.error(f"Error importing UI components: {e}")
     st.error(f"Failed to load UI components: {e}")
-
-# Configure the app
-st.set_page_config(
-    page_title="Renovation Cost Estimator",
-    page_icon="🏠",
-    layout="wide",
-    initial_sidebar_state="expanded"
-)
 
 # Define the main function
 def main():
