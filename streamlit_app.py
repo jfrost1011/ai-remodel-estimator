@@ -143,6 +143,47 @@ st.markdown("""
         color: #2c3e50;
         margin: 0;
     }
+    /* Download button styling */
+    .download-button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin-right: 10px;
+        margin-bottom: 10px;
+        background-color: #4CAF50;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-weight: bold;
+    }
+    .download-button.blue {
+        background-color: #2196F3;
+    }
+    .download-button:hover {
+        opacity: 0.9;
+    }
+    /* Warning box styling */
+    .warning-box {
+        padding: 1rem;
+        background-color: #FFF3CD;
+        color: #856404;
+        border-left: 5px solid #FFD700;
+        margin: 1rem 0;
+        border-radius: 4px;
+    }
+    /* Export section styling */
+    .export-section {
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 8px;
+        margin-top: 20px;
+        margin-bottom: 30px;
+        border: 1px solid #e9ecef;
+    }
+    .export-section h3 {
+        margin-top: 0;
+        color: #2c3e50;
+        font-weight: 600;
+    }
 </style>
 """, unsafe_allow_html=True)
 

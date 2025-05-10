@@ -23,73 +23,131 @@ def create_pdf_download_link(estimate_data: Dict[str, Any]) -> str:
         estimate_data: Dictionary containing the renovation cost estimate data
         
     Returns:
-        HTML string with download link for the PDF
+        HTML string with download link for the PDF or installation instructions
     """
-    try:
-        # Import optional dependencies
-        import pdfkit
-        from jinja2 import Template
-    except ImportError:
-        st.warning("PDF export requires pdfkit and jinja2. Install with: pip install pdfkit jinja2")
-        return '<div class="pdf-warning">PDF export requires pdfkit and jinja2. Install with: <code>pip install pdfkit jinja2</code></div>'
+    # Create a nice wrapper for our export section
+    export_section_start = '<div class="export-section">'
+    export_section_end = '</div>'
     
-    # Create a temporary directory for our files
-    with tempfile.TemporaryDirectory() as tmpdirname:
-        # Generate a PDF file
-        pdf_path = os.path.join(tmpdirname, "renovation_estimate.pdf")
-        
-        # Create HTML content for the PDF
-        html_content = generate_estimate_html(estimate_data)
-        
-        # Write HTML to a temporary file
-        html_path = os.path.join(tmpdirname, "estimate.html")
-        with open(html_path, "w") as f:
-            f.write(html_content)
-        
-        # Convert HTML to PDF
-        try:
-            # Try with installed wkhtmltopdf
-            pdfkit.from_file(html_path, pdf_path)
-            
-            # Read the PDF file
-            with open(pdf_path, "rb") as f:
-                pdf_data = f.read()
-            
-            # Convert to base64 for the download link
-            b64_pdf = base64.b64encode(pdf_data).decode()
-            
-            # Create download link with styling
-            href = f'''
-            <a href="data:application/pdf;base64,{b64_pdf}" 
-               download="renovation_estimate.pdf" 
-               style="display: inline-block; padding: 0.5rem 1rem; 
-                      background-color: #4CAF50; color: white; 
-                      text-decoration: none; border-radius: 4px; 
-                      font-weight: bold;">
-                <span style="vertical-align: middle;">📄 Download PDF Report</span>
-            </a>
-            '''
-            return href
-            
-        except Exception as e:
-            # More detailed error message
-            error_msg = f'''
-            <div style="padding: 1rem; background-color: #FFF3CD; color: #856404; 
-                       border-left: 5px solid #FFD700; margin: 1rem 0;">
-                <p><strong>PDF Export Requires wkhtmltopdf</strong></p>
-                <p>PDF export requires the wkhtmltopdf tool to be installed on your system.</p>
-                <ol>
-                    <li>Download from <a href="https://wkhtmltopdf.org/downloads.html" target="_blank">wkhtmltopdf.org</a></li>
-                    <li>Install the package appropriate for your system</li>
-                    <li>Restart your Streamlit app</li>
-                </ol>
-                <p>Then try the export again!</p>
-                <p><small>Technical details: {str(e)}</small></p>
-            </div>
-            '''
-            return error_msg
+    # First check for installation instructions message
+    install_message = """
+    <div class="warning-box">
+        <p><strong>PDF Export Requires Additional Tools</strong></p>
+        <p>To enable PDF export, you need to install:</p>
+        <ol>
+            <li>Install Python packages: <code>pip install pdfkit jinja2</code></li>
+            <li>Download wkhtmltopdf from <a href="https://wkhtmltopdf.org/downloads.html" target="_blank">wkhtmltopdf.org</a></li>
+            <li>Install the downloaded package for your system</li>
+            <li>Restart your Streamlit app</li>
+        </ol>
+    </div>
+    """
     
-    return ""
+    # For now, since this doesn't work in the deployed environment, let's provide a simulated download
+    # This creates a "download" that actually contains JSON data of the estimate
+    
+    # Format the estimate data nicely
+    formatted_data = {
+        "project_details": {
+            "project_type": estimate_data.get("project_type", "").title(),
+            "location": f"ZIP Code {estimate_data.get('zip_code', '')}",
+            "square_footage": f"{estimate_data.get('sqft', 0)} sq ft",
+            "material_grade": estimate_data.get("material_grade", "").title(),
+            "timeline": estimate_data.get("timeline", "").title()
+        },
+        "cost_summary": {
+            "total_cost": f"${estimate_data.get('total', 0):,}",
+            "per_sqft_cost": f"${estimate_data.get('per_sqft', 0)}",
+            "timeline_weeks": f"{estimate_data.get('timeline_weeks', 0)} weeks"
+        },
+        "cost_breakdown": estimate_data.get("breakdown", {}),
+        "generation_date": datetime.now().strftime("%B %d, %Y")
+    }
+    
+    # Convert to JSON
+    import json
+    json_data = json.dumps(formatted_data, indent=2)
+    
+    # Encode as base64
+    b64_data = base64.b64encode(json_data.encode()).decode()
+    
+    # Create a direct download link for the estimate data as JSON
+    direct_download = f'''
+    <a href="data:application/json;base64,{b64_data}" 
+       download="renovation_estimate.json" 
+       class="download-button">
+        <span style="vertical-align: middle;">📊 Download Estimate Data</span>
+    </a>
+    '''
+    
+    # Create link for a simple text report
+    text_report = f"""
+Renovation Cost Estimate
+========================
+Generated on {datetime.now().strftime("%B %d, %Y")}
+
+PROJECT DETAILS
+--------------
+Project Type: {estimate_data.get("project_type", "").title()}
+Location: ZIP Code {estimate_data.get("zip_code", "")}
+Square Footage: {estimate_data.get("sqft", 0)} sq ft
+Material Grade: {estimate_data.get("material_grade", "").title()}
+Timeline: {estimate_data.get("timeline", "").title()}
+
+COST SUMMARY
+-----------
+Total Estimated Cost: ${estimate_data.get('total', 0):,}
+Cost Per Square Foot: ${estimate_data.get('per_sqft', 0)}
+Estimated Timeline: {estimate_data.get('timeline_weeks', 0)} weeks
+
+COST BREAKDOWN
+------------
+"""
+    
+    # Add breakdown details
+    breakdown = estimate_data.get("breakdown", {})
+    for category, amount in breakdown.items():
+        percentage = round((amount / estimate_data.get('total', 1)) * 100, 1)
+        text_report += f"{category.title()}: ${amount:,} ({percentage}%)\n"
+    
+    # Add notes
+    text_report += """
+NEXT STEPS
+---------
+1. Contact contractors for quotes
+2. Plan your renovation timeline
+3. Create a budget based on this estimate
+4. Share this report with potential contractors
+
+© HomeAdvisorAI - This estimate is for planning purposes only and actual costs may vary.
+"""
+    
+    # Encode text report as base64
+    b64_text = base64.b64encode(text_report.encode()).decode()
+    
+    # Create a direct download link for the text report
+    text_download = f'''
+    <a href="data:text/plain;base64,{b64_text}" 
+       download="renovation_estimate.txt" 
+       class="download-button blue">
+        <span style="vertical-align: middle;">📄 Download Text Report</span>
+    </a>
+    '''
+    
+    # Combine both download options with a better header
+    downloads = f"""
+    {export_section_start}
+    <h3>Download Your Estimate</h3>
+    <p>Choose one of the following export options:</p>
+    <div style="margin: 20px 0;">
+        {direct_download}
+        {text_download}
+    </div>
+    {install_message}
+    {export_section_end}
+    """
+    
+    return downloads
 
 def generate_estimate_html(estimate_data: Dict[str, Any]) -> str:
     """

@@ -48,7 +48,7 @@ def render_home():
     - Detailed cost breakdowns by category
     - Timeline estimates
     - Historical project comparisons
-    - PDF export of your estimate
+    - Export options for your estimate
     
     To get started, select "Estimator" from the navigation.
     """)
@@ -214,12 +214,12 @@ def render_estimate_results(result):
     # Export options
     st.markdown("## Export Options")
     
-    # Generate PDF download link
-    pdf_link = create_pdf_download_link(result)
-    st.markdown(pdf_link, unsafe_allow_html=True)
+    # Generate download links
+    download_links = create_pdf_download_link(result)
+    st.markdown(download_links, unsafe_allow_html=True)
     
     # Add a "Start New Estimate" button
-    if st.button("Start New Estimate"):
+    if st.button("Start New Estimate", key="start_new"):
         # Clear the session state to start over
         if 'estimation_result' in st.session_state:
             del st.session_state.estimation_result
