@@ -1,0 +1,97 @@
+[
+  {
+    "id": "proj-0001",
+    "project_type": "kitchen",
+    "zip_code": "90210",
+    "square_feet": 200,
+    "material_grade": "premium",
+    "timeline_months": 2,
+    "total_cost": 65000,
+    "cost_breakdown": {
+      "materials": 26000,
+      "labor": 22750,
+      "permits": 3250,
+      "design": 6500,
+      "contingency": 6500
+    },
+    "timeline_weeks": 8,
+    "client_satisfaction": 4.7,
+    "created_at": "2023-10-15T14:30:22Z"
+  },
+  {
+    "id": "proj-0002",
+    "project_type": "bathroom",
+    "zip_code": "10001",
+    "square_feet": 85,
+    "material_grade": "luxury",
+    "timeline_months": 1,
+    "total_cost": 42000,
+    "cost_breakdown": {
+      "materials": 16800,
+      "labor": 14700,
+      "permits": 2100,
+      "design": 4200,
+      "contingency": 4200
+    },
+    "timeline_weeks": 4,
+    "client_satisfaction": 4.9,
+    "created_at": "2023-11-05T09:45:18Z"
+  },
+  {
+    "id": "proj-0003",
+    "project_type": "addition",
+    "zip_code": "60007",
+    "square_feet": 450,
+    "material_grade": "standard",
+    "timeline_months": 4,
+    "total_cost": 125000,
+    "cost_breakdown": {
+      "materials": 50000,
+      "labor": 43750,
+      "permits": 6250,
+      "design": 12500,
+      "contingency": 12500
+    },
+    "timeline_weeks": 16,
+    "client_satisfaction": 4.5,
+    "created_at": "2023-12-20T11:15:30Z"
+  },
+  {
+    "id": "proj-0004",
+    "project_type": "kitchen",
+    "zip_code": "30328",
+    "square_feet": 175,
+    "material_grade": "standard",
+    "timeline_months": 2,
+    "total_cost": 45000,
+    "cost_breakdown": {
+      "materials": 18000,
+      "labor": 15750,
+      "permits": 2250,
+      "design": 4500,
+      "contingency": 4500
+    },
+    "timeline_weeks": 7,
+    "client_satisfaction": 4.6,
+    "created_at": "2024-01-10T16:20:45Z"
+  },
+  {
+    "id": "proj-0005",
+    "project_type": "bathroom",
+    "zip_code": "94103",
+    "square_feet": 65,
+    "material_grade": "premium",
+    "timeline_months": 1,
+    "total_cost": 32000,
+    "cost_breakdown": {
+      "materials": 12800,
+      "labor": 11200,
+      "permits": 1600,
+      "design": 3200,
+      "contingency": 3200
+    },
+    "timeline_weeks": 3,
+    "client_satisfaction": 4.8,
+    "created_at": "2024-02-05T10:30:15Z"
+  }
+] 
