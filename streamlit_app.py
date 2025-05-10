@@ -10,9 +10,32 @@ import sys
 from pathlib import Path
 import traceback
 
-# Print Python version for debugging
+# Print Python version and other diagnostic info for debugging
 import platform
 print(f"Python version: {platform.python_version()}")
+
+# Try to print package versions for diagnostic purposes
+try:
+    print("Checking installed package versions:")
+    # Import pip to get version information
+    import pkg_resources
+    
+    # List of packages to check
+    packages_to_check = [
+        "langchain", "langchain-core", "langchain-community", 
+        "langchain-pinecone", "streamlit", "pandas"
+    ]
+    
+    # Check each package version
+    for package in packages_to_check:
+        try:
+            version = pkg_resources.get_distribution(package).version
+            print(f"  {package}: {version}")
+        except pkg_resources.DistributionNotFound:
+            print(f"  {package}: Not installed")
+    print("Package check complete")
+except Exception as e:
+    print(f"Error checking package versions: {e}")
 
 # Add the project root to Python path
 project_root = Path(__file__).parent.absolute()
@@ -85,6 +108,23 @@ def run_fallback_app():
     This is a simplified fallback version of the Renovation Cost Estimator.
     The full version couldn't be loaded due to dependency issues.
     """)
+    
+    # Add diagnostic information
+    with st.expander("Diagnostic Information"):
+        st.code(f"Python version: {platform.python_version()}")
+        st.subheader("Package Versions")
+        
+        # Try to get package versions
+        packages_info = []
+        for package in ["langchain", "langchain-core", "langchain-community", "streamlit", "pandas"]:
+            try:
+                version = pkg_resources.get_distribution(package).version
+                packages_info.append({"Package": package, "Version": version})
+            except:
+                packages_info.append({"Package": package, "Version": "Not installed or version unknown"})
+        
+        # Display as a table
+        st.table(pd.DataFrame(packages_info))
     
     st.markdown("""
     The complete version includes:
