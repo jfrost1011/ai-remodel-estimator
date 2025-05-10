@@ -109,18 +109,67 @@ st.markdown("""
         padding: 1rem;
         border-radius: 5px;
     }
+    /* PDF warning styling */
+    .pdf-warning {
+        padding: 10px;
+        background-color: #fff3cd;
+        border-left: 5px solid #ffc107;
+        margin: 10px 0;
+    }
+    /* Active navigation item */
+    .css-1djdyxw:hover {
+        color: #f63366;
+    }
+    /* Cost range */
+    .cost-range {
+        font-size: 1.2rem;
+        color: #2c3e50;
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+    /* App title container */
+    .title-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 1rem;
+    }
+    .title-emoji {
+        font-size: 2.5rem;
+    }
+    .title-text {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #2c3e50;
+        margin: 0;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # Sidebar navigation
 def main():
-    # App header in the sidebar
+    # App header in the sidebar with money bag emoji for estimator
     st.sidebar.markdown('<p class="sidebar-title">🏠 AI Remodel Cost Estimator</p>', unsafe_allow_html=True)
     st.sidebar.markdown("---")
     
     # Navigation
     page = st.sidebar.radio("Navigation", list(pages.keys()))
     st.sidebar.markdown("---")
+    
+    # Display page title with emoji based on current page
+    if page == "Home":
+        emoji = "🏠"
+    else:
+        emoji = "💰"
+    
+    # Display the title with emoji
+    st.markdown(
+        f'<div class="title-container">'
+        f'<span class="title-emoji">{emoji}</span>'
+        f'<span class="title-text">Renovation Cost Estimator</span>'
+        f'</div>', 
+        unsafe_allow_html=True
+    )
     
     # Display the selected page
     pages[page]()

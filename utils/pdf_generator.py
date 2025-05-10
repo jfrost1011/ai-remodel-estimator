@@ -31,7 +31,7 @@ def create_pdf_download_link(estimate_data: Dict[str, Any]) -> str:
         from jinja2 import Template
     except ImportError:
         st.warning("PDF export requires pdfkit and jinja2. Install with: pip install pdfkit jinja2")
-        return ""
+        return '<div class="pdf-warning">PDF export requires pdfkit and jinja2. Install with: <code>pip install pdfkit jinja2</code></div>'
     
     # Create a temporary directory for our files
     with tempfile.TemporaryDirectory() as tmpdirname:
@@ -50,21 +50,46 @@ def create_pdf_download_link(estimate_data: Dict[str, Any]) -> str:
         try:
             # Try with installed wkhtmltopdf
             pdfkit.from_file(html_path, pdf_path)
-        except OSError:
-            # Fallback message if wkhtmltopdf is not installed
-            st.error("PDF generation requires wkhtmltopdf to be installed. Please install it from https://wkhtmltopdf.org/downloads.html")
-            return ""
-        
-        # Read the PDF file
-        with open(pdf_path, "rb") as f:
-            pdf_data = f.read()
-        
-        # Convert to base64 for the download link
-        b64_pdf = base64.b64encode(pdf_data).decode()
-        
-        # Create download link
-        href = f'<a href="data:application/pdf;base64,{b64_pdf}" download="renovation_estimate.pdf">Download PDF Report</a>'
-        return href
+            
+            # Read the PDF file
+            with open(pdf_path, "rb") as f:
+                pdf_data = f.read()
+            
+            # Convert to base64 for the download link
+            b64_pdf = base64.b64encode(pdf_data).decode()
+            
+            # Create download link with styling
+            href = f'''
+            <a href="data:application/pdf;base64,{b64_pdf}" 
+               download="renovation_estimate.pdf" 
+               style="display: inline-block; padding: 0.5rem 1rem; 
+                      background-color: #4CAF50; color: white; 
+                      text-decoration: none; border-radius: 4px; 
+                      font-weight: bold;">
+                <span style="vertical-align: middle;">📄 Download PDF Report</span>
+            </a>
+            '''
+            return href
+            
+        except Exception as e:
+            # More detailed error message
+            error_msg = f'''
+            <div style="padding: 1rem; background-color: #FFF3CD; color: #856404; 
+                       border-left: 5px solid #FFD700; margin: 1rem 0;">
+                <p><strong>PDF Export Requires wkhtmltopdf</strong></p>
+                <p>PDF export requires the wkhtmltopdf tool to be installed on your system.</p>
+                <ol>
+                    <li>Download from <a href="https://wkhtmltopdf.org/downloads.html" target="_blank">wkhtmltopdf.org</a></li>
+                    <li>Install the package appropriate for your system</li>
+                    <li>Restart your Streamlit app</li>
+                </ol>
+                <p>Then try the export again!</p>
+                <p><small>Technical details: {str(e)}</small></p>
+            </div>
+            '''
+            return error_msg
+    
+    return ""
 
 def generate_estimate_html(estimate_data: Dict[str, Any]) -> str:
     """
@@ -150,10 +175,15 @@ def generate_estimate_html(estimate_data: Dict[str, Any]) -> str:
                 color: #7f8c8d;
                 font-size: 12px;
             }
+            .logo {
+                text-align: center;
+                margin-bottom: 20px;
+            }
         </style>
     </head>
     <body>
         <div class="header">
+            <div class="logo">🏠</div>
             <h1>Renovation Cost Estimate</h1>
             <div class="date">Generated on {{ date }}</div>
         </div>
@@ -218,6 +248,16 @@ def generate_estimate_html(estimate_data: Dict[str, Any]) -> str:
                 <li>Create a budget based on this estimate</li>
                 <li>Share this report with potential contractors</li>
             </ol>
+        </div>
+        
+        <div class="section">
+            <h2>Additional Recommended Services</h2>
+            <ul>
+                <li><strong>Professional Design Services:</strong> For complex renovations, professional design services can help maximize space and functionality</li>
+                <li><strong>Permit Assistance:</strong> Navigate local building codes and permit requirements</li>
+                <li><strong>Project Management:</strong> Coordinate contractors and timeline to keep your project on schedule</li>
+                <li><strong>Financing Options:</strong> Explore home equity loans or renovation-specific financing</li>
+            </ul>
         </div>
         
         <div class="footer">
