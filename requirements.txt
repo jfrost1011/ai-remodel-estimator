@@ -1,18 +1,26 @@
+# --- UI / Utils ---
 streamlit==1.31.0
 pandas==2.2.0
 numpy==1.26.4
 matplotlib==3.8.2
 python-dotenv==1.0.1
 
+# --- LangChain stack (all versions are mutually compatible) ---
 langchain==0.2.5
 langchain-community==0.2.5
-langchain-core==0.2.7
-langchain-openai==0.0.5
-openai==1.12.0
-langsmith==0.1.99
+langchain-openai==0.1.9        # 0.1.x works with core 0.2.*
+openai==1.33.0                 # any 1.26+ <2.0 works
+langsmith==0.1.99              # any <0.2.0 is OK
+
+# --- Vector DB client ---
 pinecone-client==2.2.4
 
+# --- ML / Embeddings ---
+torch==2.2.2                   # first wheel that supports Python 3.12
 sentence-transformers==2.6.1
-torch==2.2.2
 scikit-learn==1.3.2
+
+# --- Data / Misc ---
 pyarrow==12.0.0
+pdfkit==1.0.0
+datasets==2.16.0               # optional, for synthetic data scripts 
