@@ -12,10 +12,6 @@ from pathlib import Path
 project_root = Path(__file__).parent.absolute()
 sys.path.append(str(project_root))
 
-# Add renovation-estimator to the path for imports
-renovation_estimator_path = project_root / "renovation-estimator"
-sys.path.append(str(renovation_estimator_path))
-
 # Import dependencies
 import streamlit as st
 from dotenv import load_dotenv
@@ -37,20 +33,15 @@ os.environ.setdefault("USE_PINECONE", "false")
 # Try-except blocks for imports to handle potential import errors gracefully
 try:
     # Import backend modules
-    from backend.estimator import get_cost_estimate
-    from backend.vector_store import search_similar_projects
-    from utils.data_loader import load_sample_data
+    from backend import get_cost_estimate, search_similar_projects
+    from renovation_estimator.utils.data_loader import load_sample_data
 except ImportError as e:
     logger.error(f"Error importing backend modules: {e}")
     st.error(f"Failed to load backend modules: {e}")
 
 try:
     # Import UI components
-    from ui.home_page import render_home_page
-    from ui.estimate_page import render_estimate_page
-    from ui.search_page import render_search_page
-    from ui.dashboard_page import render_dashboard_page
-    from ui.admin_page import render_admin_page
+    from ui import render_home_page, render_estimate_page, render_search_page, render_dashboard_page, render_admin_page
 except ImportError as e:
     logger.error(f"Error importing UI components: {e}")
     st.error(f"Failed to load UI components: {e}")
