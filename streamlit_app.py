@@ -26,7 +26,7 @@ sys.path.append(str(project_root))
 from dotenv import load_dotenv
 
 # Import the UI pages
-from ui import pages
+from ui.pages import pages
 
 # Load environment variables
 load_dotenv()
@@ -42,25 +42,16 @@ os.environ.setdefault("EMBEDDING_MODEL_PATH", "jfrost10/renovation-cost-estimato
 os.environ.setdefault("MOCK_DATA", "true")
 os.environ.setdefault("USE_PINECONE", "false")
 
-# Define page mapping
-PAGES = {
-    "Home": pages.render_home,
-    "Estimator": pages.render_estimator,
-    "Search": pages.render_search_page,
-    "Dashboard": pages.render_dashboard_page,
-    "Admin": pages.render_admin_page
-}
-
 # Create the sidebar
 st.sidebar.title("🏠 Renovation Estimator")
 st.sidebar.markdown("---")
 
 # Navigation
-choice = st.sidebar.radio("Navigation", list(PAGES.keys()))
+choice = st.sidebar.radio("Navigation", list(pages.keys()))
 
 # Credits
 st.sidebar.markdown("---")
 st.sidebar.caption("© 2024 Renovation Estimator")
 
 # Render the selected page
-PAGES[choice]()
+pages[choice]()
