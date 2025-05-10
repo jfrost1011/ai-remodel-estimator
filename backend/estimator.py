@@ -2,13 +2,13 @@
 def simple_estimate(zip_code: str,
                     project_type: str,
                     square_feet: float,
-                    material_grade: str,
+                    material: str,
                     timeline: str) -> dict:
     """Return a naïve cost breakdown so the UI can render."""
     base_cost = {"kitchen": 250, "bathroom": 300,
                  "addition": 200}.get(project_type, 250)
 
-    grade_mult = {"economy": 0.9, "standard": 1.0, "premium": 1.2}[material_grade]
+    grade_mult = {"economy": 0.9, "standard": 1.0, "premium": 1.2}[material]
     timeline_mult = {"flexible": 0.95, "standard": 1.0, "rush": 1.15}[timeline]
 
     total = square_feet * base_cost * grade_mult * timeline_mult
