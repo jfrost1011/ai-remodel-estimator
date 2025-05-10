@@ -7,6 +7,7 @@ It serves as the entry point for Streamlit and handles navigation and page routi
 
 import streamlit as st
 from dotenv import load_dotenv
+import os
 from ui.pages import pages
 
 # Load environment variables
@@ -14,7 +15,7 @@ load_dotenv()
 
 # Page configuration
 st.set_page_config(
-    page_title="Renovation Cost Estimator",
+    page_title="AI Remodel Cost Estimator",
     page_icon="🏠",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -24,8 +25,8 @@ st.set_page_config(
 st.markdown("""
 <style>
     .main .block-container {
-        padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding-top: 1rem;
+        padding-bottom: 1rem;
     }
     .stTabs [data-baseweb="tab-list"] {
         gap: 2px;
@@ -43,11 +44,81 @@ st.markdown("""
         background-color: #e6f0ff;
         border-bottom: 2px solid #4b78e6;
     }
+    /* Main app header styling */
+    section[data-testid="stSidebar"] .block-container {
+        padding-top: 1rem;
+    }
+    /* Metrics styling */
+    [data-testid="stMetric"] {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 5px;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    }
+    [data-testid="stMetric"] > div {
+        display: flex;
+        justify-content: center;
+        text-align: center;
+    }
+    [data-testid="stMetricLabel"] {
+        font-size: 1rem !important;
+        font-weight: 500;
+    }
+    [data-testid="stMetricValue"] {
+        font-size: 1.8rem !important;
+        font-weight: 600;
+        color: #1e88e5;
+    }
+    [data-testid="stMetricDelta"] {
+        font-size: 0.9rem !important;
+        font-weight: 400;
+    }
+    /* Button styling */
+    .stButton > button {
+        background-color: #1e88e5;
+        color: white;
+        font-weight: 500;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 5px;
+    }
+    .stButton > button:hover {
+        background-color: #1976d2;
+    }
+    /* Form submit button */
+    button[kind="primaryFormSubmit"] {
+        background-color: #1e88e5;
+        color: white;
+        border: none;
+    }
+    /* Expander styling */
+    .streamlit-expanderHeader {
+        font-weight: 600;
+        background-color: #f8f9fa;
+    }
+    /* Sidebar title */
+    .sidebar-title {
+        margin-bottom: 0;
+        font-size: 1.5rem;
+        font-weight: 600;
+        color: #2c3e50;
+    }
+    /* Footer info */
+    .sidebar-footer {
+        background-color: #f8f9fa;
+        padding: 1rem;
+        border-radius: 5px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
 # Sidebar navigation
 def main():
+    # App header in the sidebar
+    st.sidebar.markdown('<p class="sidebar-title">🏠 AI Remodel Cost Estimator</p>', unsafe_allow_html=True)
+    st.sidebar.markdown("---")
+    
+    # Navigation
     page = st.sidebar.radio("Navigation", list(pages.keys()))
     st.sidebar.markdown("---")
     
@@ -57,12 +128,10 @@ def main():
     # Footer
     st.sidebar.markdown("---")
     st.sidebar.markdown("#### About")
-    st.sidebar.info(
-        """
-        This app provides cost estimates for common renovation projects.
-        
-        © 2023 HomeAdvisorAI
-        """
+    st.sidebar.markdown(
+        '<div class="sidebar-footer">This app provides cost estimates for common renovation projects.<br><br>'
+        '© 2023 HomeAdvisorAI</div>',
+        unsafe_allow_html=True
     )
 
 if __name__ == "__main__":
