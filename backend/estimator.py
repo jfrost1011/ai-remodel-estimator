@@ -29,6 +29,26 @@ from backend.langsmith_logger import get_langsmith_logger
 # Initialize LangSmith logger
 langsmith_logger = get_langsmith_logger()
 
+
+class ValidationError(Exception):
+    """Raised when input validation fails."""
+    pass
+
+
+# Validation constants
+VALID_PROJECT_TYPES = {"kitchen", "bathroom", "addition"}
+VALID_MATERIAL_GRADES = {"standard", "premium", "luxury"}
+VALID_TIMELINE_MONTHS = {1, 2, 3}
+
+# Square footage ranges by project type
+SQUARE_FEET_RANGES = {
+    "kitchen": (50, 500),
+    "bathroom": (20, 300),
+    "addition": (100, 2000),
+}
+DEFAULT_SQUARE_FEET_RANGE = (20, 2000)
+
+
 class CostEstimator:
     """Cost estimator for renovation projects."""
     
@@ -129,9 +149,116 @@ Include only the JSON object in your response, no other text.
                     documents.append(Document(page_content=content, metadata=metadata))
                 
                 return documents
-                
+
         return CustomRetriever(self.vector_store)
-    
+
+    def _validate_input(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Validate and normalize input data.
+
+        Args:
+            input_data: Dictionary containing project parameters.
+
+        Returns:
+            Validated and normalized input dictionary.
+
+        Raises:
+            ValidationError: If any input fails validation.
+        """
+        errors = []
+
+        # Extract values with support for alternative names
+        project_type = input_data.get("project_type", input_data.get("room_type"))
+        square_feet = input_data.get("square_feet", input_data.get("square_footage"))
+        material_grade = input_data.get("material_grade")
+        zip_code = input_data.get("zip_code")
+        timeline_months = input_data.get("timeline_months")
+
+        # Validate project_type (required)
+        if project_type is None:
+            errors.append("project_type is required")
+        elif not isinstance(project_type, str):
+            errors.append(f"project_type must be a string, got {type(project_type).__name__}")
+        elif project_type.lower() not in VALID_PROJECT_TYPES:
+            errors.append(
+                f"project_type must be one of {sorted(VALID_PROJECT_TYPES)}, got '{project_type}'"
+            )
+        else:
+            project_type = project_type.lower()
+
+        # Validate square_feet (required)
+        if square_feet is None:
+            errors.append("square_feet is required")
+        else:
+            try:
+                square_feet = int(square_feet)
+                if square_feet <= 0:
+                    errors.append("square_feet must be a positive number")
+                else:
+                    # Check range based on project type
+                    if project_type and project_type in SQUARE_FEET_RANGES:
+                        min_sqft, max_sqft = SQUARE_FEET_RANGES[project_type]
+                    else:
+                        min_sqft, max_sqft = DEFAULT_SQUARE_FEET_RANGE
+
+                    if not (min_sqft <= square_feet <= max_sqft):
+                        errors.append(
+                            f"square_feet for {project_type or 'project'} must be between "
+                            f"{min_sqft} and {max_sqft}, got {square_feet}"
+                        )
+            except (TypeError, ValueError):
+                errors.append(f"square_feet must be a number, got {type(square_feet).__name__}")
+
+        # Validate material_grade (required)
+        if material_grade is None:
+            errors.append("material_grade is required")
+        elif not isinstance(material_grade, str):
+            errors.append(f"material_grade must be a string, got {type(material_grade).__name__}")
+        elif material_grade.lower() not in VALID_MATERIAL_GRADES:
+            errors.append(
+                f"material_grade must be one of {sorted(VALID_MATERIAL_GRADES)}, got '{material_grade}'"
+            )
+        else:
+            material_grade = material_grade.lower()
+
+        # Validate zip_code (required)
+        if zip_code is None:
+            errors.append("zip_code is required")
+        else:
+            zip_str = str(zip_code)
+            if not zip_str.isdigit() or len(zip_str) != 5:
+                errors.append(f"zip_code must be a 5-digit string, got '{zip_code}'")
+            else:
+                zip_code = zip_str
+
+        # Validate timeline_months (required)
+        if timeline_months is None:
+            errors.append("timeline_months is required")
+        else:
+            try:
+                timeline_months = int(timeline_months)
+                if timeline_months not in VALID_TIMELINE_MONTHS:
+                    errors.append(
+                        f"timeline_months must be one of {sorted(VALID_TIMELINE_MONTHS)}, "
+                        f"got {timeline_months}"
+                    )
+            except (TypeError, ValueError):
+                errors.append(
+                    f"timeline_months must be an integer, got {type(timeline_months).__name__}"
+                )
+
+        # Raise validation error if any errors occurred
+        if errors:
+            raise ValidationError("Input validation failed: " + "; ".join(errors))
+
+        # Return normalized input
+        return {
+            "project_type": project_type,
+            "square_feet": square_feet,
+            "material_grade": material_grade,
+            "zip_code": zip_code,
+            "timeline_months": timeline_months,
+        }
+
     def estimate(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Generate a cost estimate based on input data."""
         # Use LangSmith logger's trace decorator if available
@@ -147,13 +274,14 @@ Include only the JSON object in your response, no other text.
     
     def _estimate(self, input_data: Dict[str, Any]) -> Dict[str, Any]:
         """Internal method to generate a cost estimate based on input data."""
-        # Extract input parameters with support for both naming conventions
-        project_type = input_data.get("project_type", input_data.get("room_type", "kitchen"))
-        square_feet = input_data.get("square_feet", input_data.get("square_footage", 200))
-        material_grade = input_data.get("material_grade", "standard")
-        zip_code = input_data.get("zip_code", "00000")
-        timeline_months = input_data.get("timeline_months", 2)
-        
+        # Validate and normalize input
+        validated = self._validate_input(input_data)
+        project_type = validated["project_type"]
+        square_feet = validated["square_feet"]
+        material_grade = validated["material_grade"]
+        zip_code = validated["zip_code"]
+        timeline_months = validated["timeline_months"]
+
         # Retrieve similar projects
         query = f"{project_type} renovation with {square_feet} sq ft using {material_grade} materials"
         
